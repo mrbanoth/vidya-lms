@@ -13,13 +13,7 @@
       rel="stylesheet"
     />
     <title>Vidya — Learn the skill. Finish the course.</title>
-    <script>
-      try {
-        const t = localStorage.getItem("vidya-theme") || "system";
-        const dark = t === "dark" || (t === "system" && matchMedia("(prefers-color-scheme: dark)").matches);
-        document.documentElement.classList.toggle("dark", dark);
-      } catch {}
-    </script>
+    <script src="/theme.js"></script>
   </head>
   <body>
     <div id="root"></div>

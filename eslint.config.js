@@ -10,6 +10,7 @@ export default [
       "**/dist/**",
       "**/node_modules/**",
       "**/coverage/**",
+      "apps/client/public/**",
       "apps/client/src/components/kokonut/**",
       "apps/client/src/components/ui/**",
     ],
