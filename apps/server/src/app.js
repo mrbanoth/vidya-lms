@@ -20,7 +20,8 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export function createApp() {
   const app = express();
-  app.set("trust proxy", 1);
+  // Render adds one proxy hop; Vercel rewrites in front of it add another (TRUST_PROXY=2).
+  app.set("trust proxy", env.TRUST_PROXY);
   app.disable("x-powered-by");
 
   app.use(

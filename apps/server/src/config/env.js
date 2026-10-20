@@ -5,6 +5,7 @@ const schema = z.object({
   PORT: z.coerce.number().default(5000),
   MONGO_URI: z.string().min(1).default("mongodb://127.0.0.1:27017/vidya"),
   CLIENT_URL: z.string().url().default("http://localhost:5173"),
+  TRUST_PROXY: z.coerce.number().int().min(0).max(5).default(1),
   CORS_ORIGINS: z.string().optional().default(""),
   JWT_ACCESS_SECRET: z.string().min(32, "JWT_ACCESS_SECRET must be at least 32 characters"),
   JWT_REFRESH_SECRET: z.string().min(32, "JWT_REFRESH_SECRET must be at least 32 characters"),

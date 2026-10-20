@@ -24,6 +24,8 @@ services:
         generateValue: true
       - key: COOKIE_SAMESITE
         value: lax
+      - key: TRUST_PROXY
+        value: "2"
       - key: ADMIN_NAME
         sync: false
       - key: ADMIN_EMAIL

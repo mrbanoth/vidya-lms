@@ -7,7 +7,8 @@ export function connectSocket(token) {
   socket = io(import.meta.env.VITE_API_URL || "/", {
     path: "/socket.io",
     auth: { token },
-    transports: ["websocket", "polling"],
+    // Polling first: works through the Vercel /socket.io rewrite, then upgrades when possible.
+    transports: ["polling", "websocket"],
   });
   return socket;
 }

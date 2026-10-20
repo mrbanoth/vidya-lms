@@ -63,3 +63,11 @@ cloudinary.com → free account → Dashboard shows **Cloud name, API key, API s
 | Payment says "Payments are not configured" | Razorpay keys missing |
 | Signed out after refresh | `CLIENT_URL` must match the exact site URL (https) |
 | First load takes ~50 s | Render free instances sleep after 15 min idle; a paid instance stays awake |
+
+## Option B: frontend on Vercel, backend on Render
+
+`apps/client/vercel.json` proxies `/api`, `/uploads` and `/socket.io` to the Render service, so the browser sees one site and the login cookie stays first-party.
+
+1. Deploy the backend on Render as above. Set `CLIENT_URL` to the **Vercel** URL and keep `TRUST_PROXY=2`.
+2. If the Render URL is not `https://vidya-lms.onrender.com`, change the three destinations in `apps/client/vercel.json` and push.
+3. vercel.com → **Add New → Project** → import `mrbanoth/vidya-lms` → **Root Directory: `apps/client`** → Deploy. No env vars needed (leave `VITE_API_URL` empty).
