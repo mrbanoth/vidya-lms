@@ -1,3 +1,4 @@
+import { Banknote, Hourglass, TrendingUp, Wallet } from "lucide-react";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -23,10 +24,10 @@ export default function Earnings() {
     <>
       <PageHeader title="Earnings & payouts" description={`You keep ${d.share}% of every sale. Sales are held for 30 days to cover refunds.`} />
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-        <Kpi label="Available to withdraw" value={inr(d.available)} />
-        <Kpi label="Pending (30-day hold)" value={inr(d.pending)} />
-        <Kpi label="Paid out" value={inr(d.paidOut)} />
-        <Kpi label="Lifetime earnings" value={inr(d.lifetime)} />
+        <Kpi icon={Wallet} tone="green" label="Available to withdraw" value={inr(d.available)} />
+        <Kpi icon={Hourglass} tone="amber" label="Pending (30-day hold)" value={inr(d.pending)} />
+        <Kpi icon={Banknote} tone="indigo" label="Paid out" value={inr(d.paidOut)} />
+        <Kpi icon={TrendingUp} tone="violet" label="Lifetime earnings" value={inr(d.lifetime)} />
       </div>
       <div className="grid gap-4 lg:grid-cols-[1.5fr_1fr]">
         <Card className="grid gap-3">

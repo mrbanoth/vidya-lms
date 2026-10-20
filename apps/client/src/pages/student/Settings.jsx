@@ -1,9 +1,9 @@
 import { useRef, useState } from "react";
-import { useNavigate, useParams } from "react-router";
+import { NavLink, useNavigate, useParams } from "react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Laptop, Monitor, Moon, Smartphone, Sun } from "lucide-react";
+import { Award, Bell, Laptop, LifeBuoy, Monitor, Moon, Receipt, Shield, Smartphone, Sun, User } from "lucide-react";
 import { toast } from "sonner";
 import { changePasswordSchema, LANGUAGES, profileSchema } from "@vidya/shared";
 import HoldButton from "@/components/kokonut/hold-button";
@@ -54,11 +54,12 @@ function Profile() {
   };
   return (
     <Card as="form" onSubmit={handleSubmit(onSubmit)} noValidate className="grid max-w-3xl gap-5 p-6">
+      <h2 className="text-lg font-bold">Profile Information</h2>
       <div className="flex flex-wrap items-center gap-4">
-        <Avatar name={user.name} src={user.avatar} size={72} />
+        <Avatar name={user.name} src={user.avatar} size={88} />
         <div className="grid gap-1.5">
           <input ref={fileRef} type="file" accept="image/png,image/jpeg,image/webp" className="sr-only" id="avatar-file" onChange={(e) => upload(e.target.files?.[0])} />
-          <Button type="button" variant="outline" size="sm" onClick={() => fileRef.current?.click()} disabled={uploading}>{uploading && <Spinner />} Upload photo</Button>
+          <Button type="button" variant="outline" size="sm" onClick={() => fileRef.current?.click()} disabled={uploading}>{uploading && <Spinner />} Change Photo</Button>
           <span className="text-xs text-muted-foreground">JPG, PNG or WebP, up to 5 MB</span>
         </div>
       </div>
@@ -207,19 +208,40 @@ function Preferences() {
   );
 }
 
+const MENU = [
+  ["profile", "Profile", User],
+  ["security", "Security", Shield],
+  ["preferences", "Notifications", Bell],
+];
+const LINKS = [
+  ["/orders", "Billing", Receipt],
+  ["/certificates", "Certificates", Award],
+  ["/contact", "Help & Support", LifeBuoy],
+];
+
 export default function Settings() {
   useTitle("Settings");
   const { tab = "profile" } = useParams();
-  const navigate = useNavigate();
+  const item = "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors";
   return (
     <>
-      <PageHeader title="Profile & settings" />
-      <Tabs
-        value={tab}
-        onChange={(t) => navigate(`/settings/${t}`)}
-        tabs={[{ value: "profile", label: "Profile" }, { value: "security", label: "Security" }, { value: "preferences", label: "Preferences" }]}
-      />
-      {tab === "security" ? <Security /> : tab === "preferences" ? <Preferences /> : <Profile />}
+      <PageHeader title="Settings" description="Manage your profile, security and notifications." />
+      <div className="grid items-start gap-6 lg:grid-cols-[220px_1fr]">
+        <nav aria-label="Settings" className="flex gap-1 overflow-x-auto rounded-xl border border-border bg-card p-2 scrollbar-none lg:grid">
+          {MENU.map(([v, label, Icon]) => (
+            <NavLink key={v} to={`/settings/${v}`} className={cn(item, tab === v ? "bg-accent font-semibold text-accent-foreground" : "text-muted-foreground hover:bg-muted hover:text-foreground")}>
+              <Icon className="size-4" />{label}
+            </NavLink>
+          ))}
+          <span className="mx-2 my-1 hidden h-px bg-border lg:block" />
+          {LINKS.map(([to, label, Icon]) => (
+            <NavLink key={to} to={to} className={cn(item, "text-muted-foreground hover:bg-muted hover:text-foreground")}>
+              <Icon className="size-4" />{label}
+            </NavLink>
+          ))}
+        </nav>
+        <div className="min-w-0">{tab === "security" ? <Security /> : tab === "preferences" ? <Preferences /> : <Profile />}</div>
+      </div>
     </>
   );
 }

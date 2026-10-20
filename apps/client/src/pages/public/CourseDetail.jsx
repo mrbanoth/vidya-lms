@@ -169,8 +169,8 @@ export default function CourseDetail() {
     navigate("/checkout");
   };
 
-  const buyBox = (
-    <div className="overflow-hidden rounded-2xl border border-border bg-card text-card-foreground shadow-[0_24px_60px_-30px_rgba(10,30,20,.5)]">
+  const previewCard = (
+    <div className="overflow-hidden rounded-2xl border border-border shadow-[0_24px_50px_-30px_rgba(79,70,229,.5)]">
       <button className="group relative block w-full cursor-pointer" onClick={() => firstPreview && setPreview(firstPreview)} aria-label="Preview this course">
         <CourseThumb course={course} large>
           {firstPreview && (
@@ -181,6 +181,11 @@ export default function CourseDetail() {
           )}
         </CourseThumb>
       </button>
+    </div>
+  );
+
+  const buyBox = (
+    <div className="overflow-hidden rounded-2xl border border-border bg-card text-card-foreground shadow-[0_16px_40px_-28px_rgba(16,24,40,.35)]">
       <div className="grid gap-3 p-5">
         {v.enrolled || v.isOwner ? (
           <>
@@ -250,46 +255,54 @@ export default function CourseDetail() {
 
   return (
     <>
-      <section className="bg-ink text-ink-foreground">
+      <section className="border-b border-border bg-card">
         <div className="container-page grid gap-8 py-10 lg:grid-cols-[1fr_360px] lg:py-14">
           <div className="grid min-w-0 content-start gap-4">
-            <nav aria-label="Breadcrumb" className="flex flex-wrap gap-1.5 text-xs text-ink-foreground/65">
-              <Link to="/courses" className="hover:text-ink-foreground">Courses</Link> /
-              <Link to={`/categories/${course.category.slug}`} className="hover:text-ink-foreground">{course.category.name}</Link>
+            <nav aria-label="Breadcrumb" className="flex flex-wrap gap-1.5 text-xs text-muted-foreground">
+              <Link to="/courses" className="hover:text-primary">Courses</Link> /
+              <Link to={`/categories/${course.category.slug}`} className="hover:text-primary">{course.category.name}</Link>
             </nav>
             <h1 className="text-[clamp(1.8rem,4vw,2.8rem)] font-extrabold leading-tight">{course.title}</h1>
-            <p className="max-w-[60ch] text-lg text-ink-foreground/75">{course.subtitle}</p>
+            <p className="max-w-[60ch] text-lg text-muted-foreground">{course.subtitle}</p>
             <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm">
               {course.bestseller && <Badge tone="amber">Bestseller</Badge>}
               {course.status !== "published" && <Badge tone="grey">{course.status}</Badge>}
               <span className="flex items-center gap-1.5">
                 <b className="text-warning">{course.ratingAvg?.toFixed(1)}</b>
                 <Stars value={course.ratingAvg} size={13} />
-                <span className="text-ink-foreground/65">({num(course.ratingCount)} ratings)</span>
+                <span className="text-muted-foreground">({num(course.ratingCount)} ratings)</span>
               </span>
-              <span className="text-ink-foreground/65">{num(course.studentsCount)} learners</span>
+              <span className="text-muted-foreground">{num(course.studentsCount)} students</span>
             </div>
-            <p className="text-sm">
+            <p className="flex items-center gap-2 text-sm">
+              <Avatar name={course.instructor.name} src={course.instructor.avatar} size={26} />
               Created by{" "}
               <Link to={`/instructors/${course.instructor._id}`} className="font-semibold text-primary hover:underline">
                 {course.instructor.name}
               </Link>
             </p>
-            <div className="flex flex-wrap gap-4 text-sm text-ink-foreground/65">
+            <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
               <span className="flex items-center gap-1.5"><RefreshCw className="size-4" /> Updated {date(course.updatedAt, { month: "short", year: "numeric" })}</span>
               <span className="flex items-center gap-1.5"><Globe className="size-4" /> {course.language}</span>
               <span>{course.level}</span>
             </div>
           </div>
-          <div className="lg:row-span-2 lg:-mb-72">{buyBox}</div>
+          <div className="self-center">{previewCard}</div>
         </div>
       </section>
 
-      <div className="container-page grid gap-12 py-10 lg:grid-cols-[1fr_360px]">
-        <div className="grid min-w-0 content-start gap-12">
+      <div className="container-page grid gap-10 py-8 lg:grid-cols-[1fr_360px]">
+        <div className="grid min-w-0 content-start gap-10">
+          <nav aria-label="Course sections" className="sticky top-16 z-20 -mx-1 flex gap-1 overflow-x-auto border-b border-border bg-background/95 px-1 backdrop-blur scrollbar-none">
+            {[["overview", "Overview"], ["curriculum", "Curriculum"], ["instructor", "Instructor"], ["reviews", "Reviews"]].map(([id, label]) => (
+              <a key={id} href={`#${id}`} className="whitespace-nowrap border-b-2 border-transparent px-3 py-3 text-sm font-semibold text-muted-foreground hover:border-primary hover:text-foreground">
+                {label}
+              </a>
+            ))}
+          </nav>
           {course.outcomes?.length > 0 && (
-            <Card className="grid gap-4 p-6">
-              <h2 className="text-2xl font-bold">What you will learn</h2>
+            <Card id="overview" className="grid scroll-mt-32 gap-4 p-6">
+              <h2 className="text-2xl font-bold">What you&apos;ll learn</h2>
               <ul className="grid gap-x-6 gap-y-2.5 sm:grid-cols-2">
                 {course.outcomes.map((o) => (
                   <li key={o} className="flex gap-2.5 text-sm">
@@ -299,7 +312,7 @@ export default function CourseDetail() {
               </ul>
             </Card>
           )}
-          <Curriculum course={course} onPreview={setPreview} />
+          <div id="curriculum" className="scroll-mt-32"><Curriculum course={course} onPreview={setPreview} /></div>
           {course.requirements?.length > 0 && (
             <section className="grid gap-3">
               <h2 className="text-2xl font-bold">Requirements</h2>
@@ -312,7 +325,7 @@ export default function CourseDetail() {
             <h2 className="text-2xl font-bold">Description</h2>
             <Markdown>{course.description}</Markdown>
           </section>
-          <section className="grid gap-4">
+          <section id="instructor" className="grid scroll-mt-32 gap-4">
             <h2 className="text-2xl font-bold">Instructor</h2>
             <Card className="grid gap-4">
               <div className="flex items-center gap-4">
@@ -330,8 +343,9 @@ export default function CourseDetail() {
               {course.instructor.bio && <p className="text-muted-foreground">{course.instructor.bio}</p>}
             </Card>
           </section>
-          <Reviews course={course} />
+          <div id="reviews" className="scroll-mt-32"><Reviews course={course} /></div>
         </div>
+        <aside className="row-start-1 lg:sticky lg:top-24 lg:col-start-2 lg:row-start-auto lg:self-start">{buyBox}</aside>
       </div>
 
       {related.length > 0 && (

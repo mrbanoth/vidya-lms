@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router";
 import { Heart } from "lucide-react";
-import { Stars } from "@/components/ui";
+import { Avatar, Stars } from "@/components/ui";
 import { useAuth } from "@/store/auth";
 import { useWishlist } from "@/features/cart/useCart";
 import { compact, duration } from "@/lib/format";
@@ -17,7 +17,7 @@ export default function CourseCard({ course, className }) {
   return (
     <article
       className={cn(
-        "group relative grid grid-rows-[auto_1fr] overflow-hidden rounded-2xl border border-border bg-card transition-[transform,box-shadow,border-color] duration-200 hover:-translate-y-0.5 hover:border-foreground/15 hover:shadow-[0_12px_32px_-20px_rgba(10,30,20,.35)]",
+        "group relative grid grid-rows-[auto_1fr] overflow-hidden rounded-2xl border border-border bg-card transition-[transform,box-shadow,border-color] duration-200 hover:-translate-y-1 hover:border-primary/30 hover:shadow-[0_16px_36px_-20px_rgba(79,70,229,.35)]",
         className
       )}
     >
@@ -36,33 +36,32 @@ export default function CourseCard({ course, className }) {
           <Heart className={cn("size-4", saved && "fill-destructive text-destructive")} />
         </button>
       </CourseThumb>
-      <div className="grid content-start gap-1.5 p-4 text-[13px]">
-        <span className="text-xs text-muted-foreground">
-          {course.level}
-          {course.bestseller && <span className="font-semibold text-warning"> · Bestseller</span>}
-        </span>
-        <h3 className="line-clamp-2 text-[15px] font-semibold leading-snug">
+      <div className="grid content-start gap-2 p-4 text-[13px]">
+        <h3 className="line-clamp-2 text-[15px] font-bold leading-snug">
           <Link to={`/courses/${course.slug}`} className="after:absolute after:inset-0">
             {course.title}
           </Link>
         </h3>
-        <span className="text-muted-foreground">{course.instructor?.name}</span>
-        <div className="flex items-center gap-1.5">
+        {course.subtitle && <p className="-mt-1 line-clamp-1 text-xs text-muted-foreground">{course.subtitle}</p>}
+        <div className="flex items-center gap-2">
+          <Avatar name={course.instructor?.name} src={course.instructor?.avatar} size={22} />
+          <span className="truncate text-xs font-medium">{course.instructor?.name}</span>
+          {course.bestseller && <span className="ml-auto rounded-md bg-warning/12 px-1.5 py-0.5 text-[10.5px] font-semibold text-warning">Bestseller</span>}
+        </div>
+        <div className="flex items-center gap-1.5 text-xs">
           {course.ratingCount > 0 ? (
             <>
-              <b className="font-semibold">{course.ratingAvg?.toFixed(1)}</b>
+              <b className="font-semibold text-warning">{course.ratingAvg?.toFixed(1)}</b>
               <Stars value={course.ratingAvg} size={12} />
               <span className="text-muted-foreground">({compact(course.ratingCount)})</span>
             </>
           ) : (
-            <span className="text-muted-foreground">New course</span>
+            <span className="text-muted-foreground">New · {course.level}</span>
           )}
         </div>
-        <div className="mt-1 flex items-end justify-between gap-2">
+        <div className="mt-1 flex items-end justify-between gap-2 border-t border-border pt-3">
           <Price course={course} />
-          <span className="text-xs text-muted-foreground">
-            {course.totalLessons} lessons · {duration(course.totalDuration)}
-          </span>
+          <span className="text-[11px] text-muted-foreground">{course.totalLessons} lessons · {duration(course.totalDuration)}</span>
         </div>
       </div>
     </article>

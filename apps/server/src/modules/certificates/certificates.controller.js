@@ -1,6 +1,6 @@
 import PDFDocument from "pdfkit";
 import QRCode from "qrcode";
-import { Certificate } from "../../models/index.js";
+import { Certificate, Setting } from "../../models/index.js";
 import ApiError from "../../utils/ApiError.js";
 import env from "../../config/env.js";
 
@@ -23,42 +23,57 @@ export async function verify(req, res) {
 export async function pdf(req, res) {
   const cert = await Certificate.findOne({ code: req.params.code.toUpperCase() }).lean();
   if (!cert) throw ApiError.notFound("Certificate not found");
+  const { platformName } = await Setting.get();
 
   const verifyUrl = `${env.CLIENT_URL}/verify/${cert.code}`;
-  const qr = await QRCode.toBuffer(verifyUrl, { margin: 0, width: 220, color: { dark: "#14201b" } });
+  const qr = await QRCode.toBuffer(verifyUrl, { margin: 0, width: 220, color: { dark: "#2b2b2b", light: "#fffaf0" } });
   const doc = new PDFDocument({ size: "A4", layout: "landscape", margin: 0 });
   res.setHeader("Content-Type", "application/pdf");
-  res.setHeader("Content-Disposition", `inline; filename="vidya-certificate-${cert.code}.pdf"`);
+  res.setHeader("Content-Disposition", `inline; filename="certificate-${cert.code}.pdf"`);
   doc.pipe(res);
 
   const W = doc.page.width;
   const H = doc.page.height;
-  const green = "#0f7a5c";
-  doc.rect(0, 0, W, H).fill("#f6f7f5");
-  doc.rect(28, 28, W - 56, H - 56).lineWidth(2).stroke(green);
-  doc.rect(36, 36, W - 72, H - 72).lineWidth(0.5).stroke("#9fc9b8");
+  const gold = "#c9a227";
+  const ink = "#1f2937";
+  const grey = "#6b7280";
+  const center = (text, y, font, size, color, opts = {}) =>
+    doc.fillColor(color).font(font).fontSize(size).text(text, 60, y, { width: W - 120, align: "center", ...opts });
 
-  doc.fillColor(green).font("Helvetica-Bold").fontSize(26).text("Vidya", 0, 70, { align: "center" });
-  doc.fillColor("#5b6b63").font("Helvetica").fontSize(12)
-    .text("CERTIFICATE OF COMPLETION", 0, 108, { align: "center", characterSpacing: 3 });
-  doc.fontSize(13).text("This certifies that", 0, 160, { align: "center" });
-  doc.fillColor(green).font("Helvetica-Bold").fontSize(40).text(cert.userName, 0, 185, { align: "center" });
-  doc.fillColor("#5b6b63").font("Helvetica").fontSize(13).text("has successfully completed", 0, 245, { align: "center" });
-  doc.fillColor("#14201b").font("Helvetica-Bold").fontSize(24)
-    .text(cert.courseTitle, 80, 272, { align: "center", width: W - 160 });
-  doc.fillColor("#5b6b63").font("Helvetica").fontSize(12)
-    .text(`${cert.hours} hours of content`, 0, 330, { align: "center" });
+  doc.rect(0, 0, W, H).fill("#fffaf0");
+  doc.rect(22, 22, W - 44, H - 44).lineWidth(4).stroke(gold);
+  doc.rect(32, 32, W - 64, H - 64).lineWidth(1).stroke(gold);
 
-  doc.fillColor("#14201b").font("Helvetica-Bold").fontSize(14).text(cert.instructorName || "Vidya", 90, H - 150);
-  doc.moveTo(90, H - 128).lineTo(300, H - 128).lineWidth(0.8).stroke("#14201b");
-  doc.fillColor("#5b6b63").font("Helvetica").fontSize(11).text("Instructor", 90, H - 120);
+  center(platformName, 70, "Times-Bold", 24, ink);
+  center("Certificate of Completion", 108, "Times-Bold", 40, ink);
+  center("This is to certify that", 178, "Times-Italic", 14, grey);
+  center(cert.userName, 202, "Times-BoldItalic", 42, "#1e1b4b");
+  center("has successfully completed the course", 262, "Times-Roman", 14, grey);
+  center(cert.courseTitle, 288, "Times-Bold", 24, ink);
+  const issued = new Date(cert.issuedAt).toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" });
+  center(`on ${issued} · ${cert.hours} hours of content`, 330, "Times-Roman", 12, grey);
 
-  doc.image(qr, W / 2 - 40, H - 170, { width: 80 });
+  // signatures
+  const sig = (x, name, role) => {
+    doc.fillColor(ink).font("Times-Italic").fontSize(20).text(name, x - 110, H - 168, { width: 220, align: "center" });
+    doc.moveTo(x - 90, H - 140).lineTo(x + 90, H - 140).lineWidth(0.8).stroke("#9ca3af");
+    doc.fillColor(ink).font("Helvetica-Bold").fontSize(10).text(name, x - 110, H - 132, { width: 220, align: "center" });
+    doc.fillColor(grey).font("Helvetica").fontSize(9).text(role, x - 110, H - 118, { width: 220, align: "center" });
+  };
+  sig(W * 0.25, cert.instructorName || platformName, "Instructor");
+  sig(W * 0.75, platformName, "Platform");
 
-  const issued = new Date(cert.issuedAt).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" });
-  doc.fillColor("#14201b").font("Courier-Bold").fontSize(13).text(cert.code, W - 330, H - 150, { width: 240, align: "right" });
-  doc.fillColor("#5b6b63").font("Helvetica").fontSize(11)
-    .text(`Issued ${issued}`, W - 330, H - 128, { width: 240, align: "right" })
-    .text(`Verify at ${verifyUrl}`, W - 430, H - 112, { width: 340, align: "right" });
+  // gold seal
+  const cx = W / 2;
+  const cy = H - 140;
+  doc.circle(cx, cy, 40).fill("#e8d48a");
+  doc.circle(cx, cy, 34).fill(gold);
+  doc.circle(cx, cy, 28).lineWidth(0.8).dash(2, { space: 2 }).stroke("#fffaf0").undash();
+  doc.fillColor("#fffaf0").font("Times-Bold").fontSize(9).text(platformName.toUpperCase(), cx - 30, cy - 4, { width: 60, align: "center" });
+
+  doc.image(qr, W - 120, H - 120, { width: 58 });
+  doc.fillColor(grey).font("Helvetica").fontSize(8)
+    .text(`ID ${cert.code}`, 60, H - 62, { width: W - 200, align: "left" })
+    .text(`Verify at ${verifyUrl}`, 60, H - 50, { width: W - 200, align: "left" });
   doc.end();
 }

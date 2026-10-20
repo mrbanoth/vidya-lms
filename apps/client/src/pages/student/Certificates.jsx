@@ -36,7 +36,7 @@ export default function Certificates() {
                   </div>
                 }
                 back={
-                  <div className="grid h-full content-center gap-2 rounded-2xl bg-ink p-5 text-sm text-ink-foreground">
+                  <div className="grid h-full content-center gap-2 rounded-2xl bg-primary p-5 text-sm text-primary-foreground">
                     <span className="font-mono text-xs opacity-70">{c.code}</span>
                     <span>Issued {date(c.issuedAt)}</span>
                     <span>Instructor: {c.instructorName}</span>

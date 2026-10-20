@@ -1,3 +1,4 @@
+import { Banknote, Inbox, Undo2, Wallet } from "lucide-react";
 import { useState } from "react";
 import { useSearchParams } from "react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -28,10 +29,10 @@ export default function Payments() {
       <PageHeader title="Payments & refunds" />
       {s && (
         <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-          <Kpi label="Collected (30 days)" value={inr(s.collected)} />
-          <Kpi label="Refunded (30 days)" value={inr(s.refunded)} />
-          <Kpi label="Refund requests" value={s.refundRequests} />
-          <Kpi label="Instructor payouts due" value={inr(s.payoutsDue)} />
+          <Kpi icon={Wallet} tone="green" label="Collected (30 days)" value={inr(s.collected)} />
+          <Kpi icon={Undo2} tone="amber" label="Refunded (30 days)" value={inr(s.refunded)} />
+          <Kpi icon={Inbox} tone="rose" label="Refund requests" value={s.refundRequests} />
+          <Kpi icon={Banknote} tone="indigo" label="Instructor payouts due" value={inr(s.payoutsDue)} />
         </div>
       )}
       <div className="flex flex-wrap gap-2">{FILTERS.map(([v, l]) => <Chip key={v} active={status === v} onClick={() => { setParams(v === "all" ? {} : { status: v }); setPage(1); }}>{l}</Chip>)}</div>

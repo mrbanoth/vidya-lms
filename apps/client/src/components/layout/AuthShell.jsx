@@ -14,12 +14,12 @@ export default function AuthShell({ children }) {
   const { data } = useQuery({ queryKey: ["stats"], queryFn: () => get("/stats").then((r) => r.data), staleTime: 300_000 });
   return (
     <div className="grid min-h-dvh lg:grid-cols-2">
-      <aside className="hidden bg-ink p-10 text-ink-foreground lg:grid lg:content-between">
-        <Logo inverted className="text-ink-foreground" />
+      <aside className="hidden bg-hero p-10 lg:grid lg:content-between">
+        <Logo />
         <ul className="grid gap-6">
           {POINTS.map(([Icon, t, d]) => (
             <li key={t} className="flex gap-4">
-              <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-white/10"><Icon className="size-5" /></span>
+              <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-card text-primary shadow-sm"><Icon className="size-5" /></span>
               <span className="grid gap-0.5"><b className="font-display text-lg">{t}</b><span className="text-sm opacity-70">{d}</span></span>
             </li>
           ))}

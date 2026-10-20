@@ -1,11 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate, useParams, useSearchParams } from "react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { ArrowLeft, ArrowRight, Award, ChevronLeft, HelpCircle, ListVideo, X } from "lucide-react";
+import { ArrowLeft, ArrowRight, Award, HelpCircle, ListVideo, X } from "lucide-react";
 import { toast } from "sonner";
 import ParticleButton from "@/components/kokonut/particle-button";
 import { Badge, Button, EmptyState, Skeleton } from "@/components/ui";
-import Logo from "@/components/layout/Logo";
 import VideoPlayer from "@/components/player/VideoPlayer";
 import Curriculum from "@/components/player/Curriculum";
 import LessonTabs from "@/components/player/LessonTabs";
@@ -93,20 +92,24 @@ export default function Player() {
   const current = flat.find((l) => l._id === lessonId);
 
   return (
-    <div className="min-h-dvh lg:grid lg:grid-cols-[1fr_360px]">
+    <div className="min-h-dvh lg:grid lg:grid-cols-[320px_1fr]">
       <div className="min-w-0">
-        <header className="sticky top-0 z-30 flex h-14 items-center gap-3 bg-ink px-4 text-ink-foreground">
-          <Link to="/my-learning" className="grid size-8 place-items-center rounded-md hover:bg-white/10" aria-label="Back to my learning"><ChevronLeft className="size-5" /></Link>
-          <Logo label="" inverted to="/dashboard" className="hidden sm:inline-flex" />
-          <div className="min-w-0 flex-1">
-            <b className="block truncate text-sm">{course.data?.course.title || "Loading…"}</b>
-            <span className="text-xs text-ink-foreground/60">{course.data ? `${course.data.progress}% complete` : ""}</span>
-          </div>
+        <header className="sticky top-0 z-30 flex h-14 items-center gap-3 border-b border-border bg-card/95 px-4 backdrop-blur">
+          <Link
+            to={course.data ? `/courses/${course.data.course.slug}` : "/my-learning"}
+            className="inline-flex items-center gap-1.5 rounded-md px-2 py-1.5 text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground"
+          >
+            <ArrowLeft className="size-4" /> <span className="hidden sm:inline">Back to course</span>
+          </Link>
+          <b className="min-w-0 flex-1 truncate text-center text-sm">{lesson.data?.title || course.data?.course.title || "Loading…"}</b>
           {course.data?.progress === 100 && (
-            <Button size="sm" variant="ghost" className="text-ink-foreground hover:bg-white/10" asChild><Link to="/certificates"><Award /> Certificate</Link></Button>
+            <Button size="sm" variant="ghost" asChild><Link to="/certificates"><Award /> <span className="hidden sm:inline">Certificate</span></Link></Button>
           )}
           <ThemeSwitch />
-          <Button size="sm" variant="ghost" className="text-ink-foreground hover:bg-white/10 lg:hidden" onClick={() => setShowList(true)}><ListVideo /> Lessons</Button>
+          <Button size="sm" variant="ghost" className="lg:hidden" onClick={() => setShowList(true)}><ListVideo /> Lessons</Button>
+          <Button size="sm" variant="ghost" className="font-semibold text-primary" disabled={!next} onClick={() => next && go(next)}>
+            Next <ArrowRight />
+          </Button>
         </header>
 
         <div className="bg-black">
@@ -124,7 +127,7 @@ export default function Player() {
               />
             </div>
           ) : L.type === "quiz" ? (
-            <div className="grid aspect-video max-h-[60vh] w-full place-items-center bg-ink p-6 text-center text-ink-foreground">
+            <div className="grid aspect-video max-h-[60vh] w-full place-items-center bg-slate-900 p-6 text-center text-white">
               <div className="grid justify-items-center gap-3">
                 <Badge>Quiz</Badge>
                 <h2 className="text-2xl font-bold sm:text-3xl">{L.title.replace(/^Quiz · /, "")}</h2>
@@ -178,7 +181,7 @@ export default function Player() {
 
       <aside
         className={cn(
-          "fixed inset-0 z-40 bg-card lg:sticky lg:top-0 lg:z-auto lg:block lg:h-dvh lg:border-l lg:border-border",
+          "fixed inset-0 z-40 bg-card lg:sticky lg:top-0 lg:z-auto lg:order-first lg:block lg:h-dvh lg:border-r lg:border-border",
           showList ? "block" : "hidden"
         )}
       >

@@ -162,13 +162,30 @@ export function PageHeader({ eyebrow, title, description, actions, className }) 
   );
 }
 
-export function Kpi({ label, value, delta, down, hint }) {
+const TONES = {
+  indigo: "bg-indigo-50 text-indigo-600 dark:bg-indigo-500/15 dark:text-indigo-300",
+  green: "bg-emerald-50 text-emerald-600 dark:bg-emerald-500/15 dark:text-emerald-300",
+  amber: "bg-amber-50 text-amber-600 dark:bg-amber-500/15 dark:text-amber-300",
+  rose: "bg-rose-50 text-rose-600 dark:bg-rose-500/15 dark:text-rose-300",
+  blue: "bg-sky-50 text-sky-600 dark:bg-sky-500/15 dark:text-sky-300",
+  violet: "bg-violet-50 text-violet-600 dark:bg-violet-500/15 dark:text-violet-300",
+};
+
+/** Stat card: tinted icon tile, big number, label and an optional change line. */
+export function Kpi({ label, value, delta, down, hint, icon: Icon, tone = "indigo" }) {
   return (
-    <div className="grid gap-0.5 rounded-xl border border-border bg-card p-4">
-      <span className="text-xs text-muted-foreground">{label}</span>
-      <b className="tabular font-display text-[26px] font-bold leading-tight">{value}</b>
-      {delta && <span className={cn("text-xs font-semibold", down ? "text-destructive" : "text-primary")}>{delta}</span>}
-      {hint && <span className="text-[11.5px] text-muted-foreground">{hint}</span>}
+    <div className="flex items-center gap-4 rounded-xl border border-border bg-card p-4 shadow-[0_1px_2px_rgba(16,24,40,.04)]">
+      {Icon && (
+        <span className={cn("grid size-11 shrink-0 place-items-center rounded-xl", TONES[tone])}>
+          <Icon className="size-5" />
+        </span>
+      )}
+      <div className="grid min-w-0 gap-0.5">
+        <b className="tabular truncate text-[22px] font-bold leading-tight">{value}</b>
+        <span className="truncate text-xs text-muted-foreground">{label}</span>
+        {delta && <span className={cn("text-[11.5px] font-semibold", down ? "text-destructive" : "text-success")}>{/^[−-]/.test(String(delta)) ? "↓" : "↑"} {String(delta).replace(/^[+−-]\s*/, "")}</span>}
+        {hint && !delta && <span className="text-[11.5px] text-muted-foreground">{hint}</span>}
+      </div>
     </div>
   );
 }

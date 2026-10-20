@@ -39,7 +39,7 @@ const VideoPlayer = forwardRef(function VideoPlayer({ url, startAt = 0, onProgre
 
   if (!url)
     return (
-      <div className="grid aspect-video w-full place-items-center bg-ink text-sm text-ink-foreground/70">
+      <div className="grid aspect-video w-full place-items-center bg-slate-900 text-sm text-white/70">
         Video is being prepared.
       </div>
     );

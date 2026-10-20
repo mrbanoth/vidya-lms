@@ -13,10 +13,10 @@ import NotificationBell from "./NotificationBell";
 import UserMenu from "./UserMenu";
 
 const LINKS = [
+  ["/", "Home"],
   ["/courses", "Courses"],
-  ["/categories/web-development", "Categories"],
+  ["/teach", "For Instructors"],
   ["/pricing", "Pricing"],
-  ["/teach", "Teach"],
 ];
 
 function CountBadge({ n }) {
@@ -61,10 +61,11 @@ export default function Navbar() {
             <NavLink
               key={to}
               to={to}
+              end={to === "/"}
               className={({ isActive }) =>
                 cn(
                   "rounded-lg px-3 py-2 text-sm font-semibold text-muted-foreground transition-colors hover:bg-muted hover:text-foreground",
-                  isActive && "bg-muted text-foreground"
+                  isActive && "text-primary hover:text-primary"
                 )
               }
             >
@@ -95,11 +96,11 @@ export default function Navbar() {
             </>
           ) : (
             <>
-              <Button variant="ghost" className="hidden sm:inline-flex" asChild>
+              <Button variant="outline" className="hidden border-primary/40 text-primary sm:inline-flex" asChild>
                 <Link to="/sign-in">Sign in</Link>
               </Button>
               <Button asChild className="hidden sm:inline-flex">
-                <Link to="/sign-up">Start free</Link>
+                <Link to="/sign-up">Get Started</Link>
               </Button>
             </>
           )}
@@ -115,7 +116,7 @@ export default function Navbar() {
               <SearchPalette className="max-w-none" />
             </div>
             {LINKS.map(([to, label]) => (
-              <NavLink key={to} to={to} className="rounded-lg px-3 py-2.5 font-semibold hover:bg-muted">
+              <NavLink key={to} to={to} end={to === "/"} className="rounded-lg px-3 py-2.5 font-semibold hover:bg-muted">
                 {label}
               </NavLink>
             ))}
@@ -128,7 +129,7 @@ export default function Navbar() {
             ) : (
               <div className="mt-2 grid grid-cols-2 gap-2">
                 <Button variant="outline" asChild><Link to="/sign-in">Sign in</Link></Button>
-                <Button asChild><Link to="/sign-up">Start free</Link></Button>
+                <Button asChild><Link to="/sign-up">Get Started</Link></Button>
               </div>
             )}
             <div className="mt-2 flex items-center justify-between rounded-lg px-3 py-2" onClick={(e) => e.stopPropagation()}>

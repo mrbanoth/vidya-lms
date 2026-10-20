@@ -33,7 +33,7 @@ export default function Cart() {
           <ul className="grid gap-3">
             {cart.items.map((c) => (
               <li key={c._id} className="grid grid-cols-[110px_1fr] gap-4 rounded-xl border border-border bg-card p-3 sm:grid-cols-[150px_1fr_auto] sm:items-center">
-                <Link to={`/courses/${c.slug}`}><CourseThumb course={c} className="rounded-lg" /></Link>
+                <Link to={`/courses/${c.slug}`}><CourseThumb course={c} compact className="rounded-lg" /></Link>
                 <div className="grid min-w-0 gap-1">
                   <Link to={`/courses/${c.slug}`} className="font-bold leading-snug hover:text-primary">{c.title}</Link>
                   <span className="text-xs text-muted-foreground">{c.instructor?.name} · {duration(c.totalDuration)} · ★ {c.ratingAvg}</span>

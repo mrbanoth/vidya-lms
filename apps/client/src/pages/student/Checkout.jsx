@@ -98,15 +98,19 @@ export default function Checkout() {
 
   return (
     <div className="container-page grid gap-8 py-10">
-      <ol className="flex gap-0 text-sm" aria-label="Checkout steps">
-        {["Cart", "Payment", "Done"].map((s, i) => (
-          <li key={s} className={cn("flex-1 border-t-[3px] pt-2", i <= 1 ? "border-primary" : "border-border", i === 1 ? "font-semibold" : "text-muted-foreground")}>
-            <span className="block font-mono text-[11px]">Step {i + 1}</span>{s}
-          </li>
-        ))}
-      </ol>
-      <PageHeader title="Checkout" />
-      <div className="grid items-start gap-6 lg:grid-cols-[1fr_360px]">
+      <PageHeader title="Checkout" description="Complete your purchase" />
+      <div className="grid items-start gap-6 lg:grid-cols-[160px_1fr_360px]">
+        <ol aria-label="Checkout steps" className="flex gap-6 lg:sticky lg:top-24 lg:grid lg:gap-0">
+          {[["Cart", "done"], ["Checkout", "now"], ["Payment", "next"]].map(([label, state], i) => (
+            <li key={label} className="relative flex items-center gap-3 lg:pb-8 last:lg:pb-0">
+              {i < 2 && <span aria-hidden className="absolute left-[15px] top-8 hidden h-[calc(100%-2rem)] w-px bg-border lg:block" />}
+              <span className={cn("grid size-8 shrink-0 place-items-center rounded-full text-sm font-bold", state === "done" ? "bg-primary text-primary-foreground" : state === "now" ? "bg-primary text-primary-foreground ring-4 ring-primary/20" : "border-2 border-border text-muted-foreground")}>
+                {state === "done" ? "✓" : i + 1}
+              </span>
+              <span className={cn("text-sm", state === "now" ? "font-bold" : "text-muted-foreground")}>{label}</span>
+            </li>
+          ))}
+        </ol>
         <div className="grid gap-4">
           <Card className="grid gap-4">
             <h2 className="text-lg font-bold">Billing details</h2>

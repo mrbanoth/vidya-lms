@@ -1,5 +1,6 @@
 import { Check, FileText, HelpCircle, Lock, PlayCircle } from "lucide-react";
 import { Progress } from "@/components/ui";
+import Logo from "@/components/layout/Logo";
 import { duration } from "@/lib/format";
 import { cn } from "@/lib/utils";
 
@@ -10,12 +11,13 @@ export default function Curriculum({ data, currentId, onSelect }) {
   const total = data.sections.reduce((t, s) => t + s.lessons.length, 0);
   return (
     <div className="flex h-full flex-col">
-      <div className="grid gap-2 border-b border-border p-4">
-        <div className="flex items-center justify-between">
-          <h2 className="font-display text-base font-bold">Course content</h2>
-          <span className="text-xs text-muted-foreground">{done}/{total}</span>
+      <div className="grid gap-3 border-b border-border p-4">
+        <Logo to="/dashboard" />
+        <div className="grid gap-1.5">
+          <h2 className="line-clamp-2 text-sm font-bold">{data.course.title}</h2>
+          <Progress value={data.progress} label="Course progress" />
+          <span className="text-xs text-muted-foreground">{data.progress}% complete · {done}/{total} lessons</span>
         </div>
-        <Progress value={data.progress} label="Course progress" />
       </div>
       <nav className="flex-1 overflow-y-auto pb-6" aria-label="Lessons">
         {data.sections.map((s, si) => (

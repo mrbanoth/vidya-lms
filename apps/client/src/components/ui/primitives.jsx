@@ -83,7 +83,7 @@ const BADGE = {
   blue: "bg-info/15 text-info",
   red: "bg-destructive/12 text-destructive",
   grey: "bg-muted text-muted-foreground",
-  ink: "bg-ink text-ink-foreground",
+  ink: "bg-primary text-primary-foreground",
 };
 export function Badge({ tone = "default", className, mono = false, ...props }) {
   return (

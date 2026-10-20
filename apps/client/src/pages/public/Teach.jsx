@@ -1,3 +1,4 @@
+import { IndianRupee, Percent, ShieldCheck, Smartphone } from "lucide-react";
 import { Link, useNavigate } from "react-router";
 import { Button, Kpi } from "@/components/ui";
 import { useAuth } from "@/store/auth";
@@ -31,10 +32,10 @@ export default function Teach() {
           {user?.role === "student" && <p className="text-sm text-muted-foreground">Signed in as a learner. Contact us to switch your account to an instructor account.</p>}
         </div>
         <div className="grid grid-cols-2 gap-3">
-          <Kpi label="Your revenue share" value={`${config.revenueShare}%`} />
-          <Kpi label="Refund hold" value="30 days" />
-          <Kpi label="Payout minimum" value="₹500" />
-          <Kpi label="Payout method" value="UPI" />
+          <Kpi icon={Percent} tone="indigo" label="Your revenue share" value={`${config.revenueShare}%`} />
+          <Kpi icon={ShieldCheck} tone="green" label="Refund hold" value="30 days" />
+          <Kpi icon={IndianRupee} tone="amber" label="Payout minimum" value="₹500" />
+          <Kpi icon={Smartphone} tone="violet" label="Payout method" value="UPI" />
         </div>
       </section>
       <section className="grid gap-6">

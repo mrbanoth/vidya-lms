@@ -1,3 +1,4 @@
+import { Clock, TrendingUp, Trophy, Undo2 } from "lucide-react";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Avatar, Card, Chip, Kpi, PageHeader, Skeleton } from "@/components/ui";
@@ -17,10 +18,10 @@ export default function Reports() {
       {isLoading ? <Skeleton className="h-96" /> : (
         <>
           <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-            <Kpi label="Course completion" value={`${d.completionRate}%`} hint="Of enrollments in period" />
-            <Kpi label="Minutes per active learner / day" value={d.avgMinutesPerLearner} />
-            <Kpi label="Refund rate" value={`${d.refundRate}%`} />
-            <Kpi label="New user → buyer" value={`${d.conversion}%`} />
+            <Kpi icon={Trophy} tone="green" label="Course completion" value={`${d.completionRate}%`} hint="Of enrollments in period" />
+            <Kpi icon={Clock} tone="indigo" label="Minutes per active learner / day" value={d.avgMinutesPerLearner} />
+            <Kpi icon={Undo2} tone="amber" label="Refund rate" value={`${d.refundRate}%`} />
+            <Kpi icon={TrendingUp} tone="violet" label="New user → buyer" value={`${d.conversion}%`} />
           </div>
           <div className="grid gap-4 lg:grid-cols-2">
             <Card className="grid content-start gap-4">

@@ -1,9 +1,9 @@
 import { Link } from "react-router";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowRight } from "lucide-react";
+import { AlertTriangle, ArrowRight, ClipboardCheck, IndianRupee, Users } from "lucide-react";
 import MetricCard from "@/components/kokonut/metric-card";
 import { Card, Kpi, PageHeader, Skeleton } from "@/components/ui";
-import { BarList, TrendChart } from "@/components/shared/Charts";
+import { DonutChart, TrendChart } from "@/components/shared/Charts";
 import { get } from "@/lib/api";
 import { compact, inr, num, timeAgo } from "@/lib/format";
 import { useTitle } from "@/hooks/useTitle";
@@ -22,23 +22,23 @@ export default function Overview() {
   const dot = { ok: "bg-primary", amber: "bg-warning", red: "bg-destructive" };
   return (
     <>
-      <PageHeader title="Platform overview" description={`${num(d.totals.users)} users · ${num(d.totals.courses)} live courses · ${num(d.totals.enrollments)} enrollments`} />
+      <PageHeader title="Welcome, Admin 👋" description={`${num(d.totals.users)} users · ${num(d.totals.courses)} live courses · ${num(d.totals.enrollments)} enrollments`} />
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-        <Kpi label="Active users (30 days)" value={num(d.activeUsers)} delta={`${d.activeUsersChange >= 0 ? "+" : ""}${d.activeUsersChange}%`} down={d.activeUsersChange < 0} />
-        <Kpi label="Gross sales (30 days)" value={inr(d.gmv)} delta={`${d.gmvChange >= 0 ? "+" : ""}${d.gmvChange}%`} down={d.gmvChange < 0} />
-        <Kpi label="Courses pending review" value={d.pendingReview} />
-        <Kpi label="Failed payments (30 days)" value={d.failedPayments} delta={`${d.failedChange >= 0 ? "+" : ""}${d.failedChange} vs prev`} down={d.failedChange > 0} />
+        <Kpi icon={Users} tone="indigo" label="Active users (30 days)" value={num(d.activeUsers)} delta={`${d.activeUsersChange >= 0 ? "+" : ""}${d.activeUsersChange}%`} down={d.activeUsersChange < 0} />
+        <Kpi icon={IndianRupee} tone="green" label="Gross sales (30 days)" value={inr(d.gmv)} delta={`${d.gmvChange >= 0 ? "+" : ""}${d.gmvChange}%`} down={d.gmvChange < 0} />
+        <Kpi icon={ClipboardCheck} tone="amber" label="Courses pending review" value={d.pendingReview} />
+        <Kpi icon={AlertTriangle} tone="rose" label="Failed payments (30 days)" value={d.failedPayments} delta={`${d.failedChange >= 0 ? "+" : ""}${d.failedChange} vs prev`} down={d.failedChange > 0} />
       </div>
       <div className="grid gap-4 lg:grid-cols-[1.5fr_1fr]">
         <MetricCard className="w-full max-w-none" label="Gross sales" segments={["UPI", "Card", "Other"]} data={d.gmvDaily} events={[]} periods={[7, 30, 60]} defaultPeriod={30} currency="INR" />
         <Card className="grid content-start gap-4">
-          <h2 className="text-lg font-bold">Sales by category · 30 days</h2>
-          <BarList items={d.revenueByCategory.map((r) => ({ label: r.name, value: r.total }))} format={(v) => `₹${compact(v)}`} />
+          <h2 className="text-lg font-bold">Course Categories · sales</h2>
+          <DonutChart items={d.revenueByCategory.map((r) => ({ label: r.name, value: r.total }))} format={(v) => `₹${compact(v)}`} />
         </Card>
       </div>
       <div className="grid gap-4 lg:grid-cols-[1.5fr_1fr]">
         <Card className="grid gap-3">
-          <h2 className="text-lg font-bold">Daily sign-ups · 30 days</h2>
+          <h2 className="text-lg font-bold">User Growth · daily sign-ups</h2>
           <TrendChart data={d.signups.map((s) => ({ ...s, label: s.day.slice(5) }))} x="label" y="count" height={200} />
         </Card>
         <Card className="grid content-start gap-3">

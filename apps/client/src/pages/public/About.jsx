@@ -1,3 +1,4 @@
+import { BookOpen, GraduationCap, Trophy, Users } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { Kpi } from "@/components/ui";
 import { get } from "@/lib/api";
@@ -21,10 +22,10 @@ export default function About() {
         <p className="text-lg text-muted-foreground">Most learners never finish an online course. Vidya is built around finishing: short lessons, visible progress, real projects and instructors who answer questions.</p>
       </div>
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
-        <Kpi label="Completion rate" value={data ? `${data.completionRate}%` : "—"} />
-        <Kpi label="Learners" value={data ? compact(data.learners) : "—"} />
-        <Kpi label="Instructors" value={data ? compact(data.instructors) : "—"} />
-        <Kpi label="Courses" value={data ? compact(data.courses) : "—"} />
+        <Kpi icon={Trophy} tone="green" label="Completion rate" value={data ? `${data.completionRate}%` : "—"} />
+        <Kpi icon={Users} tone="indigo" label="Learners" value={data ? compact(data.learners) : "—"} />
+        <Kpi icon={GraduationCap} tone="violet" label="Instructors" value={data ? compact(data.instructors) : "—"} />
+        <Kpi icon={BookOpen} tone="amber" label="Courses" value={data ? compact(data.courses) : "—"} />
       </div>
       <div className="grid gap-4 md:grid-cols-3">
         {VALUES.map(([t, b]) => (

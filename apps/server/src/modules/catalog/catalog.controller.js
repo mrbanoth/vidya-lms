@@ -88,6 +88,9 @@ export async function featured(_req, res) {
       User.countDocuments({ role: "instructor", deletedAt: null }),
     ]),
   ]);
+  const rated = await Course.find({ status: "published", ratingCount: { $gt: 0 } }).select("ratingAvg ratingCount").lean();
+  const ratingWeight = rated.reduce((t, c) => t + c.ratingCount, 0);
+  const avgRating = ratingWeight ? Math.round((rated.reduce((t, c) => t + c.ratingAvg * c.ratingCount, 0) / ratingWeight) * 10) / 10 : 0;
   const reviews = await Review.find({ rating: 5, comment: { $ne: "" }, hidden: false })
     .sort({ createdAt: -1 })
     .limit(3)
@@ -100,7 +103,7 @@ export async function featured(_req, res) {
       newest,
       categories,
       reviews,
-      stats: { courses: stats[0], learners: stats[1], instructors: stats[2] },
+      stats: { courses: stats[0], learners: stats[1], instructors: stats[2], avgRating },
     },
   });
 }
