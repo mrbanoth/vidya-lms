@@ -125,7 +125,7 @@ export function Tabs({ tabs, value, onChange, className }) {
           )}
         >
           {t.label}
-          {t.count != null && <span className="ml-1.5 font-mono text-xs text-muted-foreground">{t.count}</span>}
+          {t.count != null && <span className="ml-1.5 text-xs text-muted-foreground">{t.count}</span>}
         </button>
       ))}
     </div>
@@ -167,7 +167,7 @@ export function Kpi({ label, value, delta, down, hint }) {
     <div className="grid gap-0.5 rounded-xl border border-border bg-card p-4">
       <span className="text-xs text-muted-foreground">{label}</span>
       <b className="tabular font-display text-[26px] font-bold leading-tight">{value}</b>
-      {delta && <span className={cn("font-mono text-[11.5px] font-semibold", down ? "text-destructive" : "text-primary")}>{delta}</span>}
+      {delta && <span className={cn("text-xs font-semibold", down ? "text-destructive" : "text-primary")}>{delta}</span>}
       {hint && <span className="text-[11.5px] text-muted-foreground">{hint}</span>}
     </div>
   );
@@ -183,7 +183,7 @@ export function DataTable({ columns, rows, empty, rowKey = (r) => r._id || r.id 
               <th
                 key={c.key}
                 className={cn(
-                  "whitespace-nowrap border-b border-border bg-muted px-4 py-2.5 text-left font-mono text-[11px] font-semibold uppercase tracking-wider text-muted-foreground",
+                  "whitespace-nowrap border-b border-border bg-muted px-4 py-2.5 text-left text-[11px] font-semibold uppercase tracking-wider text-muted-foreground",
                   c.className
                 )}
               >

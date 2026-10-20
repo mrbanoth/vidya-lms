@@ -51,7 +51,7 @@ export default function NotificationBell({ className }) {
               >
                 <b className="font-semibold">{n.title}</b>
                 {n.body && <span className="line-clamp-2 text-muted-foreground">{n.body}</span>}
-                <span className="font-mono text-[11px] text-muted-foreground">{timeAgo(n.createdAt)}</span>
+                <span className="text-[11px] text-muted-foreground">{timeAgo(n.createdAt)}</span>
               </DropdownMenu.Item>
             ))}
           </div>

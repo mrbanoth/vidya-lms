@@ -27,7 +27,7 @@ function Curriculum({ course, onPreview }) {
       <div className="flex flex-wrap items-end justify-between gap-2">
         <h2 className="text-2xl font-bold">Course content</h2>
         <div className="flex items-center gap-3 text-sm text-muted-foreground">
-          <span className="font-mono text-xs">
+          <span className="text-xs">
             {course.sections.length} sections · {course.totalLessons} lessons · {duration(course.totalDuration)}
           </span>
           <button className="cursor-pointer font-semibold text-primary" onClick={() => setOpen(all ? new Set() : new Set(course.sections.map((s) => s._id)))}>
@@ -49,7 +49,7 @@ function Curriculum({ course, onPreview }) {
                   <ChevronDown className={cn("size-4 transition-transform", isOpen && "rotate-180")} />
                   {i + 1}. {s.title}
                 </span>
-                <span className="font-mono text-xs font-normal text-muted-foreground">
+                <span className="text-xs font-normal text-muted-foreground">
                   {s.lessons.length} lessons · {duration(s.lessons.reduce((t, l) => t + l.duration, 0))}
                 </span>
               </button>
@@ -67,7 +67,7 @@ function Curriculum({ course, onPreview }) {
                           </button>
                         )}
                       </span>
-                      <span className="font-mono text-xs text-muted-foreground">
+                      <span className="text-xs text-muted-foreground">
                         {l.type === "quiz" ? "Quiz" : duration(l.duration)}
                       </span>
                     </div>
@@ -100,9 +100,9 @@ function Reviews({ course }) {
         <div className="grid gap-1.5 text-sm">
           {course.ratingDistribution.map((r) => (
             <div key={r.star} className="grid grid-cols-[36px_1fr_40px] items-center gap-3">
-              <span className="font-mono text-xs">{r.star} ★</span>
+              <span className="text-xs">{r.star} ★</span>
               <Progress value={(r.count / total) * 100} barClassName="bg-warning" label={`${r.star} star`} />
-              <span className="text-right font-mono text-xs text-muted-foreground">{Math.round((r.count / total) * 100)}%</span>
+              <span className="text-right text-xs text-muted-foreground">{Math.round((r.count / total) * 100)}%</span>
             </div>
           ))}
         </div>
@@ -174,11 +174,9 @@ export default function CourseDetail() {
       <button className="group relative block w-full cursor-pointer" onClick={() => firstPreview && setPreview(firstPreview)} aria-label="Preview this course">
         <CourseThumb course={course} large>
           {firstPreview && (
-            <span className="absolute inset-0 grid place-items-center bg-black/25 opacity-90 transition group-hover:bg-black/35">
-              <span className="grid justify-items-center gap-2 text-sm font-semibold text-white">
-                <PlayCircle className="size-14" strokeWidth={1.4} />
-                Preview this course
-              </span>
+            <span className="absolute bottom-3 right-3 inline-flex items-center gap-1.5 rounded-full bg-card/95 px-3 py-1.5 text-xs font-semibold text-foreground shadow-sm ring-1 ring-border transition group-hover:scale-105">
+              <PlayCircle className="size-4 text-primary" />
+              Preview
             </span>
           )}
         </CourseThumb>
@@ -255,7 +253,7 @@ export default function CourseDetail() {
       <section className="bg-ink text-ink-foreground">
         <div className="container-page grid gap-8 py-10 lg:grid-cols-[1fr_360px] lg:py-14">
           <div className="grid min-w-0 content-start gap-4">
-            <nav aria-label="Breadcrumb" className="flex flex-wrap gap-1.5 font-mono text-xs text-ink-foreground/65">
+            <nav aria-label="Breadcrumb" className="flex flex-wrap gap-1.5 text-xs text-ink-foreground/65">
               <Link to="/courses" className="hover:text-ink-foreground">Courses</Link> /
               <Link to={`/categories/${course.category.slug}`} className="hover:text-ink-foreground">{course.category.name}</Link>
             </nav>
@@ -324,7 +322,7 @@ export default function CourseDetail() {
                     {course.instructor.name}
                   </Link>
                   <span className="text-sm text-muted-foreground">{course.instructor.headline}</span>
-                  <span className="font-mono text-xs text-muted-foreground">
+                  <span className="text-xs text-muted-foreground">
                     ★ {course.instructorStats.rating} · {compact(course.instructorStats.students)} learners · {course.instructorStats.courses} courses
                   </span>
                 </div>

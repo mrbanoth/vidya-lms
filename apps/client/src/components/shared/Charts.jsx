@@ -39,7 +39,7 @@ export function BarList({ items, format = (v) => v, className }) {
         <li key={i.label} className="grid gap-1.5">
           <div className="flex justify-between gap-3 text-sm">
             <span className="truncate">{i.label}</span>
-            <span className="tabular font-mono text-xs">{format(i.value)}</span>
+            <span className="tabular text-xs font-medium">{format(i.value)}</span>
           </div>
           <div className="h-1.5 overflow-hidden rounded-full bg-border">
             <div className="h-full rounded-full bg-primary" style={{ width: `${(i.value / max) * 100}%` }} />

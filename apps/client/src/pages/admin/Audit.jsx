@@ -35,7 +35,7 @@ export default function Audit() {
               { key: "actor", label: "Actor", render: (a) => <b>{a.actorName}</b> },
               { key: "action", label: "Action", render: (a) => <Badge tone={tone(a.action)}>{a.action}</Badge> },
               { key: "target", label: "Target", render: (a) => <span className="block max-w-[280px] truncate">{a.targetLabel || a.targetType}</span> },
-              { key: "ip", label: "IP", render: (a) => <span className="font-mono text-xs text-muted-foreground">{a.ip || "—"}</span> },
+              { key: "ip", label: "IP", render: (a) => <span className="text-xs text-muted-foreground">{a.ip || "—"}</span> },
             ]}
           />
           <Pagination page={page} pages={data.meta.pages} onChange={setPage} />

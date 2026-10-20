@@ -42,7 +42,7 @@ export default function Teach() {
         <ol className="grid gap-4 md:grid-cols-4">
           {STEPS.map(([t, b], i) => (
             <li key={t} className="grid gap-2 rounded-2xl border border-border bg-card p-6">
-              <span className="font-mono text-xs text-primary">Step {i + 1}</span>
+              <span className="text-xs font-semibold text-primary">Step {i + 1}</span>
               <h3 className="text-xl font-bold">{t}</h3>
               <p className="text-muted-foreground">{b}</p>
             </li>

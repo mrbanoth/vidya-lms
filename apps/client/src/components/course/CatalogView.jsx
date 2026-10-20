@@ -78,7 +78,7 @@ export default function CatalogView({ lockedCategory }) {
     <aside className="grid content-start gap-6 text-sm" aria-label="Filters">
       {!lockedCategory && (
         <fieldset className="grid gap-1.5">
-          <legend className="mb-2 font-mono text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">Category</legend>
+          <legend className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Category</legend>
           {cats.map((c) => (
             <label key={c._id} className="flex cursor-pointer items-center gap-2.5 py-0.5">
               <input
@@ -88,13 +88,13 @@ export default function CatalogView({ lockedCategory }) {
                 onChange={() => toggleIn("category", c.slug)}
               />
               <span className="flex-1">{c.name}</span>
-              <span className="font-mono text-xs text-muted-foreground">{c.courseCount}</span>
+              <span className="text-xs text-muted-foreground">{c.courseCount}</span>
             </label>
           ))}
         </fieldset>
       )}
       <fieldset className="grid gap-1.5">
-        <legend className="mb-2 font-mono text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">Level</legend>
+        <legend className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Level</legend>
         {LEVELS.slice(0, 3).map((l) => (
           <label key={l} className="flex cursor-pointer items-center gap-2.5 py-0.5">
             <input type="checkbox" className="size-4 accent-[var(--primary)]" checked={state.level.includes(l)} onChange={() => toggleIn("level", l)} />
@@ -103,7 +103,7 @@ export default function CatalogView({ lockedCategory }) {
         ))}
       </fieldset>
       <fieldset className="grid gap-1.5">
-        <legend className="mb-2 font-mono text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">Price</legend>
+        <legend className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Price</legend>
         {[["all", "All"], ["free", "Free"], ["paid", "Paid"]].map(([v, l]) => (
           <label key={v} className="flex cursor-pointer items-center gap-2.5 py-0.5">
             <input type="radio" name="price" className="size-4 accent-[var(--primary)]" checked={state.price === v} onChange={() => update({ price: v === "all" ? "" : v })} />
@@ -112,7 +112,7 @@ export default function CatalogView({ lockedCategory }) {
         ))}
       </fieldset>
       <fieldset className="grid gap-1.5">
-        <legend className="mb-2 font-mono text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">Rating</legend>
+        <legend className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Rating</legend>
         {[["", "Any rating"], ["4.5", "4.5 & up"], ["4", "4.0 & up"]].map(([v, l]) => (
           <label key={l} className="flex cursor-pointer items-center gap-2.5 py-0.5">
             <input type="radio" name="rating" className="size-4 accent-[var(--primary)]" checked={state.rating === v} onChange={() => update({ rating: v })} />

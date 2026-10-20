@@ -25,9 +25,9 @@ export default function Categories() {
         <DataTable
           rows={data}
           columns={[
-            { key: "icon", label: "Icon", render: (c) => <span className="font-mono text-lg text-primary">{c.icon}</span> },
+            { key: "icon", label: "Icon", render: (c) => <span className="text-lg text-primary">{c.icon}</span> },
             { key: "name", label: "Name", render: (c) => <b>{c.name}</b> },
-            { key: "slug", label: "Slug", render: (c) => <span className="font-mono text-xs text-muted-foreground">/{c.slug}</span> },
+            { key: "slug", label: "Slug", render: (c) => <span className="text-xs text-muted-foreground">/{c.slug}</span> },
             { key: "count", label: "Courses", render: (c) => c.courseCount },
             { key: "featured", label: "Featured", render: (c) => <Switch checked={c.featured} onChange={(v) => save.mutate({ ...c, featured: v })} label={`Feature ${c.name}`} /> },
             { key: "act", label: "", render: (c) => <div className="flex gap-1"><Button variant="ghost" size="icon-sm" aria-label="Edit" onClick={() => setEditing(c)}><Pencil /></Button><Button variant="ghost" size="icon-sm" aria-label="Delete" onClick={() => remove.mutate(c)}><Trash2 /></Button></div> },

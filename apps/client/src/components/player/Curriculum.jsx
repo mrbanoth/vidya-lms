@@ -13,14 +13,14 @@ export default function Curriculum({ data, currentId, onSelect }) {
       <div className="grid gap-2 border-b border-border p-4">
         <div className="flex items-center justify-between">
           <h2 className="font-display text-base font-bold">Course content</h2>
-          <span className="font-mono text-xs text-muted-foreground">{done}/{total}</span>
+          <span className="text-xs text-muted-foreground">{done}/{total}</span>
         </div>
         <Progress value={data.progress} label="Course progress" />
       </div>
       <nav className="flex-1 overflow-y-auto pb-6" aria-label="Lessons">
         {data.sections.map((s, si) => (
           <div key={s._id}>
-            <p className="px-4 pb-1.5 pt-4 font-mono text-[11px] uppercase tracking-wider text-muted-foreground">
+            <p className="px-4 pb-1.5 pt-4 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
               {si + 1} · {s.title}
             </p>
             {s.lessons.map((l) => {
@@ -48,7 +48,7 @@ export default function Curriculum({ data, currentId, onSelect }) {
                   </span>
                   <span className="min-w-0 flex-1 truncate">{l.title}</span>
                   {locked ? <Lock className="size-3.5 text-muted-foreground" /> : <Icon className="size-3.5 shrink-0 text-muted-foreground" />}
-                  <span className="w-12 shrink-0 text-right font-mono text-[11px] text-muted-foreground">
+                  <span className="w-12 shrink-0 text-right text-[11px] text-muted-foreground">
                     {l.type === "quiz" ? "Quiz" : duration(l.duration)}
                   </span>
                 </button>

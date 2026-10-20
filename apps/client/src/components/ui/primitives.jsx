@@ -85,7 +85,7 @@ const BADGE = {
   grey: "bg-muted text-muted-foreground",
   ink: "bg-ink text-ink-foreground",
 };
-export function Badge({ tone = "default", className, mono = true, ...props }) {
+export function Badge({ tone = "default", className, mono = false, ...props }) {
   return (
     <span
       className={cn(

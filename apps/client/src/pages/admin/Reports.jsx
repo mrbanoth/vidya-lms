@@ -31,7 +31,7 @@ export default function Reports() {
               <h2 className="text-lg font-bold">Top instructors by sales</h2>
               {d.topInstructors.map((t, i) => (
                 <div key={t._id} className="flex items-center gap-3">
-                  <span className="w-5 font-mono text-xs text-muted-foreground">{i + 1}</span>
+                  <span className="w-5 text-xs text-muted-foreground">{i + 1}</span>
                   <Avatar name={t.name} src={t.avatar} size={32} />
                   <b className="flex-1 text-sm">{t.name}</b>
                   <span className="tabular font-mono text-sm">{inr(t.total)}</span>

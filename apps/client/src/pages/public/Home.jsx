@@ -2,10 +2,10 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "motion/react";
-import { ArrowRight, BadgeCheck, Code2, Gauge, GraduationCap, Search } from "lucide-react";
+import { ArrowRight, BadgeCheck, Check, Code2, Gauge, GraduationCap, Search } from "lucide-react";
 import BackgroundPaths from "@/components/kokonut/background-paths";
 import TypewriterTitle from "@/components/kokonut/type-writer";
-import { Avatar, Badge, Button, EmptyState, Progress, Stars } from "@/components/ui";
+import { Avatar, Button, EmptyState, Progress, Stars } from "@/components/ui";
 import { CourseGrid } from "@/components/course/CourseCard";
 import { get } from "@/lib/api";
 import { compact } from "@/lib/format";
@@ -19,33 +19,55 @@ const FEATURES = [
   [BadgeCheck, "Certificates that verify", "Each certificate has a public link and QR code that employers can check."],
 ];
 
-function ContinueCard() {
+const PREVIEW = [
+  ["Welcome and course map", "4 min", true],
+  ["Set up your tools", "12 min", true],
+  ["Your first project", "17 min", "now"],
+  ["Quiz · fundamentals", "5 questions", false],
+];
+
+/** Right side of the hero: the learner's real next lesson, or a preview of the player. */
+function HeroCard() {
   const user = useAuth((s) => s.user);
   const { data } = useQuery({
     queryKey: ["my-courses"],
     queryFn: () => get("/learn/my-courses").then((r) => r.data),
     enabled: Boolean(user),
   });
-  const current = data?.find((e) => e.progress < 100) || data?.[0];
-  if (!user || !current)
+  const current = data?.find((e) => e.progress < 100);
+  if (current)
     return (
-      <div className="col-span-2 grid gap-3 rounded-2xl bg-ink p-5 text-ink-foreground">
-        <span className="text-xs opacity-70">How it works</span>
-        <b className="font-display text-xl">Enroll, learn at your pace, earn a certificate</b>
-        <p className="text-sm opacity-70">Short lessons, quizzes after each section and a verifiable certificate when you finish.</p>
-        <Link to={user ? "/courses" : "/sign-up"} className="text-sm font-semibold text-primary">{user ? "Browse courses →" : "Create a free account →"}</Link>
+      <div className="grid gap-4 rounded-2xl border border-border bg-card p-6 shadow-[0_24px_60px_-40px_rgba(10,30,20,.4)]">
+        <span className="eyebrow">Continue learning</span>
+        <h3 className="text-xl font-semibold leading-snug">{current.course.title}</h3>
+        <div className="grid gap-2">
+          <Progress value={current.progress} />
+          <span className="text-sm text-muted-foreground">{current.progress}% complete · next: {current.lastLesson?.title || "first lesson"}</span>
+        </div>
+        <Button asChild className="justify-self-start"><Link to={`/learn/${current.course._id}`}>Resume lesson <ArrowRight /></Link></Button>
       </div>
     );
   return (
-    <div className="col-span-2 grid gap-2 rounded-2xl bg-ink p-5 text-ink-foreground">
-      <span className="text-xs opacity-70">Continue learning</span>
-      <b className="font-display text-xl">{current.course.title}</b>
-      <Progress value={current.progress} className="bg-white/15" />
-      <div className="flex items-center justify-between text-xs">
-        <span className="opacity-75">{current.progress}% complete</span>
-        <Button size="sm" asChild>
-          <Link to={`/learn/${current.course._id}`}>Resume</Link>
-        </Button>
+    <div className="overflow-hidden rounded-2xl border border-border bg-card shadow-[0_24px_60px_-40px_rgba(10,30,20,.4)]" aria-hidden>
+      <div className="flex items-center justify-between border-b border-border px-5 py-3.5">
+        <span className="text-sm font-semibold">Course content</span>
+        <span className="text-xs text-muted-foreground">2 of 4 done</span>
+      </div>
+      <div className="px-5 pt-4"><Progress value={50} /></div>
+      <ul className="grid gap-1 p-3">
+        {PREVIEW.map(([t, d, state]) => (
+          <li key={t} className={state === "now" ? "flex items-center gap-3 rounded-lg bg-accent px-3 py-2.5 text-sm font-semibold text-accent-foreground" : "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm"}>
+            <span className={state === true ? "grid size-5 place-items-center rounded-full bg-primary text-primary-foreground" : state === "now" ? "size-5 rounded-full border-[5px] border-primary" : "size-5 rounded-full border-2 border-border"}>
+              {state === true && <Check className="size-3" strokeWidth={3} />}
+            </span>
+            <span className="flex-1">{t}</span>
+            <span className="text-xs text-muted-foreground">{d}</span>
+          </li>
+        ))}
+      </ul>
+      <div className="flex items-center gap-3 border-t border-border bg-muted/50 px-5 py-4">
+        <span className="grid size-9 place-items-center rounded-full bg-primary/10 text-primary"><BadgeCheck className="size-5" /></span>
+        <div className="text-sm"><b className="block font-semibold">Certificate on completion</b><span className="text-muted-foreground">Verifiable with a public link</span></div>
       </div>
     </div>
   );
@@ -60,7 +82,7 @@ export default function Home() {
 
   return (
     <div className="grid gap-20">
-      <BackgroundPaths className="border-b border-border text-primary/40" count={36} speed={0.6}>
+      <BackgroundPaths className="border-b border-border text-primary/15" count={18} speed={0.4} interactive={false}>
         <div className="text-foreground">
         <section className="container-page grid items-center gap-10 py-14 lg:grid-cols-[1.1fr_.9fr] lg:py-20">
           <motion.div
@@ -69,8 +91,8 @@ export default function Home() {
             transition={{ duration: 0.5 }}
             className="grid gap-6"
           >
-            <Badge className="justify-self-start">Project-based courses · certificates included</Badge>
-            <h1 className="text-[clamp(2.2rem,5.4vw,3.8rem)] font-extrabold leading-[1.05] tracking-[-0.03em] text-foreground">
+            <span className="eyebrow">Project-based learning</span>
+            <h1 className="text-[clamp(2.4rem,5.6vw,4rem)] font-bold leading-[1.04] tracking-[-0.035em] text-foreground">
               Learn the skill.{" "}
               <TypewriterTitle
                 as="span"
@@ -115,39 +137,14 @@ export default function Home() {
                 [data?.stats.instructors, "instructors"],
               ].map(([n, label]) => (
                 <div key={label}>
-                  <b className="tabular block font-display text-3xl font-extrabold">{n == null ? "—" : compact(n)}</b>
+                  <b className="tabular block text-3xl font-bold tracking-tight">{n == null ? "—" : compact(n)}</b>
                   <span className="text-sm text-muted-foreground">{label}</span>
                 </div>
               ))}
             </div>
           </motion.div>
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="grid grid-cols-2 gap-3"
-          >
-            <ContinueCard />
-            <div className="grid gap-2 rounded-2xl border border-border bg-card p-4 transition-transform hover:-translate-y-1">
-              <Badge tone="amber" className="justify-self-start">Quiz</Badge>
-              <b>Graded quizzes</b>
-              <span className="text-xs text-muted-foreground">Instant feedback with explanations</span>
-            </div>
-            <div className="grid gap-2 rounded-2xl border border-border bg-card p-4 transition-transform hover:-translate-y-1">
-              <Badge tone="blue" className="justify-self-start">Certificate</Badge>
-              <b>Verified PDF</b>
-              <span className="text-xs text-muted-foreground">With a QR code employers can scan</span>
-            </div>
-            <div className="grid gap-2 rounded-2xl border border-border bg-card p-4 transition-transform hover:-translate-y-1">
-              <Badge className="justify-self-start">Streak</Badge>
-              <b className="font-display text-2xl">Daily goals</b>
-              <span className="text-xs text-muted-foreground">Heatmap of every minute studied</span>
-            </div>
-            <div className="grid gap-2 rounded-2xl border border-border bg-card p-4 transition-transform hover:-translate-y-1">
-              <Badge tone="red" className="justify-self-start">Q&A</Badge>
-              <b>Ask the instructor</b>
-              <span className="text-xs text-muted-foreground">Answers inside the lesson</span>
-            </div>
+          <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.1 }}>
+            <HeroCard />
           </motion.div>
         </section>
         </div>
@@ -171,9 +168,9 @@ export default function Home() {
                 to={`/categories/${c.slug}`}
                 className="grid gap-1.5 rounded-xl border border-border bg-card p-4 transition hover:-translate-y-0.5 hover:border-primary"
               >
-                <span className="font-mono text-xl font-semibold text-primary">{c.icon}</span>
+                <span className="grid size-9 place-items-center rounded-lg bg-accent text-sm font-semibold text-accent-foreground">{c.icon}</span>
                 <b>{c.name}</b>
-                <span className="text-xs text-muted-foreground">{c.courseCount ? `${c.courseCount} courses` : "Coming soon"}</span>
+                <span className="text-xs text-muted-foreground">{c.courseCount ? `${c.courseCount} course${c.courseCount === 1 ? "" : "s"}` : "Coming soon"}</span>
               </Link>
             ) : (
               <div key={c._id} className="skeleton h-28 rounded-xl" />

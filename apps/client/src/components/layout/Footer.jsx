@@ -18,11 +18,11 @@ export default function Footer() {
           <p className="max-w-[34ch] text-sm text-muted-foreground">
             Project-based courses from working engineers. Learn, build and get certified.
           </p>
-          <span className="font-mono text-xs text-muted-foreground">© {new Date().getFullYear()} {config.platformName}</span>
+          <span className="text-xs text-muted-foreground">© {new Date().getFullYear()} {config.platformName}</span>
         </div>
         {COLS.map(([title, links]) => (
           <div key={title} className="grid content-start gap-2">
-            <h4 className="font-mono text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">{title}</h4>
+            <h4 className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">{title}</h4>
             {links.map(([to, label]) => (
               <Link key={to} to={to} className="text-sm hover:text-primary">
                 {label}

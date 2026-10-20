@@ -31,7 +31,7 @@ export default function CourseReview() {
         <div className="grid gap-4 lg:grid-cols-2">
           {data.map((c) => (
             <Card key={c._id} className="grid content-start gap-4">
-              <div className="flex items-center justify-between gap-2"><StatusPill status={c.status} /><span className="font-mono text-xs text-muted-foreground">{c.submittedAt ? `Submitted ${date(c.submittedAt)}` : ""}</span></div>
+              <div className="flex items-center justify-between gap-2"><StatusPill status={c.status} /><span className="text-xs text-muted-foreground">{c.submittedAt ? `Submitted ${date(c.submittedAt)}` : ""}</span></div>
               <div className="grid gap-1"><h2 className="text-lg font-bold">{c.title}</h2><p className="text-sm text-muted-foreground">{c.subtitle}</p></div>
               <div className="flex items-center gap-3 text-sm"><Avatar name={c.instructor.name} src={c.instructor.avatar} size={30} /><span><b>{c.instructor.name}</b> · {c.category?.name} · {c.totalLessons} lessons · {duration(c.totalDuration)} · {inr(c.discountPrice ?? c.price)}</span></div>
               <ul className="grid gap-1.5 text-sm">

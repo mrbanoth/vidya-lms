@@ -5,17 +5,17 @@
 
 /* Vidya design tokens. Kokonut UI and shadcn components read the same names. */
 :root {
-  --background: #f6f7f5;
-  --foreground: #14201b;
+  --background: #fafaf9;
+  --foreground: #111816;
   --card: #ffffff;
   --card-foreground: #14201b;
   --popover: #ffffff;
   --popover-foreground: #14201b;
   --primary: #0f7a5c;
   --primary-foreground: #ffffff;
-  --secondary: #eef1ee;
+  --secondary: #f2f3f2;
   --secondary-foreground: #14201b;
-  --muted: #eef1ee;
+  --muted: #f2f3f2;
   --muted-foreground: #5b6b63;
   --accent: #d7efe6;
   --accent-foreground: #0b5e46;
@@ -23,8 +23,8 @@
   --destructive-foreground: #ffffff;
   --warning: #b86a12;
   --info: #2b5fb8;
-  --border: #dde3de;
-  --input: #dde3de;
+  --border: #e6e8e6;
+  --input: #dcdfdc;
   --ring: #0f7a5c;
   --ink: #0d1714;
   --ink-foreground: #e8f1ec;
@@ -85,9 +85,9 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
-  --font-display: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
-  --font-sans: "Figtree", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-display: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-sans: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
   --animate-shimmer: shimmer 1.4s infinite linear;
   @keyframes shimmer {
     to {
@@ -106,7 +106,8 @@
   body {
     @apply bg-background text-foreground font-sans antialiased;
     font-size: 15px;
-    line-height: 1.55;
+    line-height: 1.6;
+    font-feature-settings: "ss01", "cv11";
   }
   h1,
   h2,
@@ -132,7 +133,7 @@
     padding-right: max(1rem, env(safe-area-inset-right));
   }
   .eyebrow {
-    @apply font-mono text-[11.5px] tracking-[0.12em] uppercase text-primary;
+    @apply text-[12px] font-semibold tracking-[0.08em] uppercase text-primary;
   }
   .tabular {
     font-variant-numeric: tabular-nums;

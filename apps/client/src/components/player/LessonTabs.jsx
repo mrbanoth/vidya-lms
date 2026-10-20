@@ -33,7 +33,7 @@ function Notes({ courseId, lesson, getTime }) {
       {[["This lesson", here], ["Other lessons", other]].map(([title, list]) =>
         list.length ? (
           <div key={title} className="grid gap-2">
-            <h3 className="font-mono text-[11px] uppercase tracking-wider text-muted-foreground">{title}</h3>
+            <h3 className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">{title}</h3>
             {list.map((n) => (
               <Card key={n._id} className="flex gap-3 p-3.5">
                 <Badge tone="grey">{clock(n.timeSec)}</Badge>

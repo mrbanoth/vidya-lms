@@ -53,7 +53,7 @@ export default function Certificates() {
           ))}
           {locked.map((e) => (
             <div key={e.id} className="grid h-52 content-center gap-3 rounded-2xl border border-dashed border-border p-5">
-              <span className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-wider text-muted-foreground"><Lock className="size-3.5" /> Locked</span>
+              <span className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground"><Lock className="size-3.5" /> Locked</span>
               <b className="line-clamp-2">{e.course.title}</b>
               <Progress value={e.progress} />
               <span className="text-xs text-muted-foreground">{e.progress}% done. Finish the course to unlock.</span>

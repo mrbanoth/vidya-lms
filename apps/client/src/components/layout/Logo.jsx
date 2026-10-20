@@ -1,17 +1,21 @@
 import { Link } from "react-router";
 import { cn } from "@/lib/utils";
 
-export default function Logo({ to = "/", label = "Vidya", className, inverted }) {
+/** Brand mark: a "V" that reads as a learning path converging on a point, with a dot for the learner. */
+export function LogoMark({ className, size = 28 }) {
   return (
-    <Link to={to} className={cn("inline-flex items-center gap-2 font-display text-xl font-extrabold", className)}>
-      <span className="relative grid size-7 place-items-center rounded-lg bg-primary" aria-hidden>
-        <span
-          className={cn(
-            "ml-0.5 border-y-[6px] border-l-[9px] border-y-transparent",
-            inverted ? "border-l-ink" : "border-l-card"
-          )}
-        />
-      </span>
+    <svg viewBox="0 0 64 64" width={size} height={size} className={cn("shrink-0", className)} aria-hidden>
+      <rect width="64" height="64" rx="16" fill="var(--primary)" />
+      <path d="M19 20.5l13 23 13-23" fill="none" stroke="var(--primary-foreground)" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" />
+      <circle cx="32" cy="15.5" r="3.5" fill="var(--primary-foreground)" opacity=".7" />
+    </svg>
+  );
+}
+
+export default function Logo({ to = "/", label = "Vidya", className }) {
+  return (
+    <Link to={to} className={cn("inline-flex items-center gap-2.5 text-[19px] font-bold tracking-tight", className)}>
+      <LogoMark />
       {label}
     </Link>
   );

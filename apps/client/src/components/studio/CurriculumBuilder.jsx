@@ -23,7 +23,7 @@ function LessonRow({ lesson, onEdit, onDelete }) {
       <span className="min-w-0 flex-1 truncate">{lesson.title}</span>
       {lesson.isPreview && <Badge tone="blue">Preview</Badge>}
       {empty && <Badge tone="amber">Needs content</Badge>}
-      <span className="hidden font-mono text-xs text-muted-foreground sm:inline">{lesson.type === "quiz" ? `${lesson.quiz?.questions?.length || 0} Q` : duration(lesson.duration)}</span>
+      <span className="hidden text-xs text-muted-foreground sm:inline">{lesson.type === "quiz" ? `${lesson.quiz?.questions?.length || 0} Q` : duration(lesson.duration)}</span>
       <Button variant="ghost" size="icon-sm" aria-label="Edit lesson" onClick={onEdit}><Pencil /></Button>
       <Button variant="ghost" size="icon-sm" aria-label="Delete lesson" onClick={onDelete}><Trash2 /></Button>
     </li>
@@ -86,7 +86,7 @@ export default function CurriculumBuilder({ course, refresh }) {
         {sections.map((s, i) => (
           <Card key={s._id} className="overflow-hidden p-0">
             <div className="flex flex-wrap items-center gap-2 bg-muted px-3 py-2.5">
-              <span className="font-mono text-xs text-muted-foreground">Section {i + 1}</span>
+              <span className="text-xs text-muted-foreground">Section {i + 1}</span>
               <input
                 aria-label="Section title"
                 defaultValue={s.title}

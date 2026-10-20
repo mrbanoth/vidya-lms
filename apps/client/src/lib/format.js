@@ -68,20 +68,12 @@ export const pctOff = (c) =>
     ? Math.round((1 - c.discountPrice / c.price) * 100)
     : 0;
 
-export const glyph = (title = "") => {
-  const map = [
-    [/react native/i, "▢"],
-    [/react/i, "</>"],
-    [/node/i, "λ"],
-    [/mern/i, "{ }"],
-    [/mongo/i, "db"],
-    [/typescript/i, "TS"],
-    [/tailwind/i, "tw"],
-    [/design|figma/i, "◎"],
-    [/docker|devops|ci/i, "⛴"],
-    [/machine|python|ml/i, "∑"],
-    [/llm|ai/i, "AI"],
-    [/system/i, "⇄"],
-  ];
-  return map.find(([rx]) => rx.test(title))?.[1] || title.slice(0, 2).toUpperCase();
-};
+/** Two-letter course monogram, e.g. "React 19 Deep Dive" → "RD". */
+export const glyph = (title = "") =>
+  title
+    .replace(/[^a-zA-Z0-9 ]/g, " ")
+    .split(" ")
+    .filter((w) => w.length > 2 || /^[A-Z]{2,}$/.test(w))
+    .slice(0, 2)
+    .map((w) => w[0].toUpperCase())
+    .join("") || title.slice(0, 2).toUpperCase();

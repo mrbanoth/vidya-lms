@@ -50,9 +50,9 @@ export default function Overview() {
               <ArrowRight className="size-4 text-muted-foreground" />
             </Link>
           ))}
-          <h3 className="mt-3 font-mono text-[11px] uppercase tracking-wider text-muted-foreground">Recent admin activity</h3>
+          <h3 className="mt-3 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Recent admin activity</h3>
           {d.recent.map((a) => (
-            <div key={a._id} className="text-sm"><b>{a.actorName}</b> <span className="font-mono text-xs text-primary">{a.action}</span> {a.targetLabel}<div className="text-xs text-muted-foreground">{timeAgo(a.createdAt)}</div></div>
+            <div key={a._id} className="text-sm"><b>{a.actorName}</b> <span className="text-xs font-semibold text-primary">{a.action}</span> {a.targetLabel}<div className="text-xs text-muted-foreground">{timeAgo(a.createdAt)}</div></div>
           ))}
         </Card>
       </div>

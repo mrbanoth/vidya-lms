@@ -36,7 +36,7 @@ export default function Notifications() {
                   <b className="text-sm">{n.title}</b>
                   {n.body && <span className="text-sm text-muted-foreground">{n.body}</span>}
                 </span>
-                <span className="shrink-0 font-mono text-[11px] text-muted-foreground">{timeAgo(n.createdAt)}</span>
+                <span className="shrink-0 text-[11px] text-muted-foreground">{timeAgo(n.createdAt)}</span>
               </button>
             </li>
           ))}

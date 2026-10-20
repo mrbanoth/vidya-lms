@@ -101,7 +101,7 @@ export default function Quiz() {
         <div className="flex gap-1.5" aria-hidden>
           {questions.map((_, k) => <span key={k} className={cn("h-1.5 flex-1 rounded-full", k < i ? "bg-primary" : k === i ? "bg-primary/60" : "bg-border")} />)}
         </div>
-        <span className="font-mono text-xs text-muted-foreground">Question {i + 1} of {questions.length}</span>
+        <span className="text-xs text-muted-foreground">Question {i + 1} of {questions.length}</span>
       </div>
       <motion.div key={i} initial={{ opacity: 0, x: 16 }} animate={{ opacity: 1, x: 0 }} className="grid gap-5">
         <h1 className="text-2xl font-bold">{q.text}</h1>

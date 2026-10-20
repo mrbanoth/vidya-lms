@@ -89,13 +89,13 @@ export default function Dashboard() {
           )}
           {inProgress.slice(0, 4).map((e) => (
             <div key={e.id} className="flex items-center gap-3">
-              <span className="grid size-12 shrink-0 place-items-center rounded-xl font-mono text-sm font-semibold text-white" style={{ background: e.course.color }}>{glyph(e.course.title)}</span>
+              <span className="grid size-12 shrink-0 place-items-center rounded-xl text-sm font-semibold text-white" style={{ background: e.course.color }}>{glyph(e.course.title)}</span>
               <div className="min-w-0 flex-1">
                 <b className="block truncate text-sm">{e.course.title}</b>
                 <span className="block truncate text-xs text-muted-foreground">Next: {e.lastLesson?.title || "First lesson"}</span>
               </div>
               <Progress value={e.progress} className="hidden w-28 sm:block" />
-              <span className="w-10 text-right font-mono text-xs">{e.progress}%</span>
+              <span className="w-10 text-right text-xs font-medium tabular">{e.progress}%</span>
               <Button size="sm" variant="outline" asChild><Link to={`/learn/${e.course._id}`}>Resume</Link></Button>
             </div>
           ))}

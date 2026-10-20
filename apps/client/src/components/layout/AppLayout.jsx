@@ -90,11 +90,11 @@ function SideNav({ role, onNavigate }) {
   return (
     <div className="flex h-full flex-col gap-1 overflow-y-auto px-3 py-5">
       <Logo to={nav.home} label={role === "student" ? "Vidya" : nav.label} inverted className="mb-5 ml-2 text-ink-foreground" />
-      <p className="px-3 pb-1.5 font-mono text-[10.5px] uppercase tracking-[0.14em] text-ink-foreground/45">{nav.label}</p>
+      <p className="px-3 pb-1.5 text-[11px] font-semibold uppercase tracking-wider text-ink-foreground/45">{nav.label}</p>
       {nav.items.map(link)}
       {switches.length > 0 && (
         <>
-          <p className="mt-4 px-3 pb-1.5 font-mono text-[10.5px] uppercase tracking-[0.14em] text-ink-foreground/45">Switch view</p>
+          <p className="mt-4 px-3 pb-1.5 text-[11px] font-semibold uppercase tracking-wider text-ink-foreground/45">Switch view</p>
           {switches.map(link)}
         </>
       )}

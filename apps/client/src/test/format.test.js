@@ -27,7 +27,7 @@ describe("format helpers", () => {
   });
   it("builds initials and glyphs", () => {
     expect(initials("Sandeep Naik")).toBe("SN");
-    expect(glyph("MERN Stack from Zero")).toBe("{ }");
+    expect(glyph("MERN Stack from Zero")).toBe("MS");
   });
 });
 
