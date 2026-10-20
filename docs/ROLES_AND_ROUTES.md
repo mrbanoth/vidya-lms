@@ -113,7 +113,9 @@ Roles stack upward: **an instructor can also learn like a student**, and **an ad
 | `/courses` | Catalog with filters |
 | `/courses/:slug` | Course details |
 | `/categories/:slug` | Category |
+| `/instructors` | Instructors directory |
 | `/instructors/:id` | Instructor profile |
+| `/faq` | FAQ |
 | `/pricing` | Pricing |
 | `/about` | About |
 | `/contact` | Contact |
@@ -161,6 +163,7 @@ Roles stack upward: **an instructor can also learn like a student**, and **an ad
 | `/studio/courses/:id/:tab?` | Course editor (basics, curriculum, pricing, media, publish) |
 | `/studio/students` | Students |
 | `/studio/qa` | Q&A inbox |
+| `/studio/reviews` | Reviews with rating breakdown |
 | `/studio/earnings` | Earnings & payouts |
 
 ### Admin — `RequireAuth roles=[admin]`
@@ -174,6 +177,7 @@ Roles stack upward: **an instructor can also learn like a student**, and **an ad
 | `/admin/coupons` | Coupons |
 | `/admin/categories` | Categories |
 | `/admin/reports` | Reports |
+| `/admin/roles` | Roles & permissions matrix |
 | `/admin/audit` | Audit log |
 | `/admin/settings` | Platform settings |
 
@@ -232,6 +236,7 @@ Legend: 🌐 public · 👤 any signed-in user · 🎓 instructor or admin · �
 | GET | `/courses/:slug` | Course details (signed-in viewer gets enrolled/owner info) |
 | GET | `/courses/:slug/related` | Related courses |
 | GET | `/courses/:slug/reviews` | Reviews |
+| GET | `/instructors` | Instructors with published courses |
 | GET | `/instructors/:id` | Instructor profile |
 | POST | `/contact` | Contact form ⏱️ |
 
@@ -280,6 +285,7 @@ Legend: 🌐 public · 👤 any signed-in user · 🎓 instructor or admin · �
 | GET | `/instructor/dashboard` | Dashboard metrics |
 | GET | `/instructor/students` | My students |
 | GET | `/instructor/questions` | Q&A inbox |
+| GET | `/instructor/reviews` | Reviews on my courses + rating summary |
 | GET | `/instructor/earnings` | Earnings |
 | POST | `/instructor/payouts` | Request payout |
 | GET / POST | `/instructor/courses` | List / create courses |
@@ -314,7 +320,8 @@ Legend: 🌐 public · 👤 any signed-in user · 🎓 instructor or admin · �
 | PATCH / DELETE | `/admin/coupons/:id` | Edit / delete coupon |
 | POST | `/admin/categories` | Create category |
 | PATCH / DELETE | `/admin/categories/:id` | Edit / delete category |
-| GET | `/admin/audit` | Audit log |
+| GET | `/admin/roles` | Roles & permissions matrix |
+| `/admin/audit` | Audit log |
 | GET / PATCH | `/admin/settings` | Platform settings (revenue share, signup flags, maintenance) |
 
 ---

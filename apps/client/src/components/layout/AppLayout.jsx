@@ -2,7 +2,7 @@ import { useState } from "react";
 import { NavLink, Outlet, useLocation, useNavigate } from "react-router";
 import {
   Award, BarChart3, Bell, BookOpen, CheckSquare, Compass, CreditCard, FileText, FolderTree, GraduationCap,
-  Heart, LayoutDashboard, LogOut, Menu, MessageSquare, PlusCircle, Receipt, Settings, Shield, Tag, Users, Wallet, X,
+  Heart, KeyRound, LayoutDashboard, LogOut, Menu, MessageSquare, PlusCircle, Receipt, Settings, Shield, Star, Tag, Users, Wallet, X,
 } from "lucide-react";
 import { useAuth } from "@/store/auth";
 import { signOut } from "@/features/auth/session";
@@ -38,6 +38,7 @@ const NAV = {
       ["/studio/courses/new", PlusCircle, "New course"],
       ["/studio/students", Users, "Students"],
       ["/studio/qa", MessageSquare, "Q&A"],
+      ["/studio/reviews", Star, "Reviews"],
       ["/studio/earnings", Wallet, "Earnings"],
     ],
   },
@@ -53,6 +54,7 @@ const NAV = {
       ["/admin/coupons", Tag, "Coupons"],
       ["/admin/categories", FolderTree, "Categories"],
       ["/admin/reports", FileText, "Reports"],
+      ["/admin/roles", KeyRound, "Roles & permissions"],
       ["/admin/audit", Shield, "Audit log"],
       ["/admin/settings", Settings, "Settings"],
     ],

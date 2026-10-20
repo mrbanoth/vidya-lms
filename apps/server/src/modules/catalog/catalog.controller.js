@@ -221,6 +221,29 @@ export async function courseReviews(req, res) {
   res.json({ success: true, data: items, meta: pageMeta(total, page, limit) });
 }
 
+export async function listInstructors(_req, res) {
+  const users = await User.find({ role: { $in: ["instructor", "admin"] }, deletedAt: null, status: { $ne: "banned" } })
+    .select("name avatar headline")
+    .lean();
+  const courses = await Course.find({ instructor: { $in: users.map((u) => u._id) }, status: "published" })
+    .select("instructor studentsCount ratingAvg ratingCount")
+    .lean();
+  const data = users
+    .map((u) => {
+      const mine = courses.filter((c) => String(c.instructor) === String(u._id));
+      const rated = mine.filter((c) => c.ratingCount);
+      const reviews = rated.reduce((s, c) => s + c.ratingCount, 0);
+      const rating = reviews ? rated.reduce((s, c) => s + c.ratingAvg * c.ratingCount, 0) / reviews : 0;
+      return {
+        ...u,
+        stats: { courses: mine.length, students: mine.reduce((s, c) => s + c.studentsCount, 0), rating: Math.round(rating * 10) / 10, reviews },
+      };
+    })
+    .filter((u) => u.stats.courses > 0)
+    .sort((a, b) => b.stats.students - a.stats.students);
+  res.json({ success: true, data });
+}
+
 export async function instructorProfile(req, res) {
   const user = await User.findOne({ _id: req.params.id, role: { $in: ["instructor", "admin"] } })
     .select("name avatar headline bio website github linkedin createdAt")

@@ -24,6 +24,7 @@ const kindUpload = (map) => (req, res, next) => {
 r.get("/dashboard", c.dashboard);
 r.get("/students", c.students);
 r.get("/questions", c.questions);
+r.get("/reviews", c.reviews);
 r.get("/earnings", c.earnings);
 r.post("/payouts", c.requestPayout);
 

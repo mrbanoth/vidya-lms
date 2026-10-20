@@ -125,3 +125,24 @@ describe("admin console", () => {
     resetMaintenanceCache();
   });
 });
+
+describe("reviews and instructor directory", () => {
+  it("lists an instructor's own reviews with a rating summary", async () => {
+    const r = await api().get("/api/v1/instructor/reviews").set(auth(ins.token));
+    expect(r.status).toBe(200);
+    expect(r.body.data.summary.breakdown).toHaveLength(5);
+    expect(Array.isArray(r.body.data.items)).toBe(true);
+  });
+
+  it("keeps instructor reviews behind the instructor role", async () => {
+    const student = await login("student@vidya.dev");
+    const r = await api().get("/api/v1/instructor/reviews").set(auth(student.token));
+    expect(r.status).toBe(403);
+  });
+
+  it("lists public instructors with published courses", async () => {
+    const r = await api().get("/api/v1/instructors");
+    expect(r.status).toBe(200);
+    expect(r.body.data.every((u) => u.stats.courses > 0 && !u.email)).toBe(true);
+  });
+});

@@ -4,8 +4,8 @@ import { useConfig } from "@/hooks/useConfig";
 
 const COLS = [
   ["Learn", [["/courses", "All courses"], ["/categories/web-development", "Categories"], ["/pricing", "Pricing"], ["/verify", "Verify a certificate"]]],
-  ["Teach", [["/teach", "Become an instructor"], ["/studio", "Instructor studio"]]],
-  ["Company", [["/about", "About"], ["/contact", "Contact"]]],
+  ["Teach", [["/teach", "Become an instructor"], ["/instructors", "Our instructors"], ["/studio", "Instructor studio"]]],
+  ["Company", [["/about", "About"], ["/faq", "FAQ"], ["/contact", "Contact"]]],
 ];
 
 export default function Footer() {

@@ -48,7 +48,7 @@ export default function InstructorDashboard() {
             currency="INR"
           />
         ) : <Skeleton className="h-80" />}
-        <Card className="grid content-start gap-4">
+        <Card className="grid min-w-0 grid-cols-1 content-start gap-4">
           <h2 className="text-lg font-bold">Earnings by course · 30 days</h2>
           {d ? <BarList items={d.byCourse.map((c) => ({ label: c.title, value: c.revenue }))} format={(v) => inr(v)} /> : <Skeleton className="h-40" />}
         </Card>
@@ -92,8 +92,8 @@ export default function InstructorDashboard() {
         </div>
       </Card>
 
-      <div className="grid gap-4 lg:grid-cols-2">
-        <Card className="grid content-start gap-4">
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+        <Card className="grid min-w-0 grid-cols-1 content-start gap-4">
           <div className="flex items-center justify-between"><h2 className="text-lg font-bold">Unanswered questions</h2><Link to="/studio/qa" className="text-sm font-semibold text-primary">Open inbox</Link></div>
           {d?.openQuestions.length === 0 && <p className="text-sm text-muted-foreground">Inbox zero. Nice.</p>}
           {d?.openQuestions.map((q) => (
@@ -103,7 +103,7 @@ export default function InstructorDashboard() {
             </Link>
           ))}
         </Card>
-        <Card className="grid content-start gap-4">
+        <Card className="grid min-w-0 grid-cols-1 content-start gap-4">
           <h2 className="text-lg font-bold">Latest reviews</h2>
           {d?.recentReviews.length === 0 && <p className="text-sm text-muted-foreground">No reviews yet.</p>}
           {d?.recentReviews.map((r) => (

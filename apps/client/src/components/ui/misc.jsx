@@ -174,14 +174,14 @@ const TONES = {
 /** Stat card: tinted icon tile, big number, label and an optional change line. */
 export function Kpi({ label, value, delta, down, hint, icon: Icon, tone = "indigo" }) {
   return (
-    <div className="flex items-center gap-4 rounded-xl border border-border bg-card p-4 shadow-[0_1px_2px_rgba(16,24,40,.04)]">
+    <div className="flex min-w-0 flex-col items-start gap-3 rounded-xl border border-border bg-card p-4 shadow-[0_1px_2px_rgba(16,24,40,.04)] sm:flex-row sm:items-center sm:gap-4">
       {Icon && (
         <span className={cn("grid size-11 shrink-0 place-items-center rounded-xl", TONES[tone])}>
           <Icon className="size-5" />
         </span>
       )}
       <div className="grid min-w-0 gap-0.5">
-        <b className="tabular truncate text-[22px] font-bold leading-tight">{value}</b>
+        <b className="tabular text-xl font-bold leading-tight break-all sm:text-[22px]">{value}</b>
         <span className="truncate text-xs text-muted-foreground">{label}</span>
         {delta && <span className={cn("text-[11.5px] font-semibold", down ? "text-destructive" : "text-success")}>{/^[−-]/.test(String(delta)) ? "↓" : "↑"} {String(delta).replace(/^[+−-]\s*/, "")}</span>}
         {hint && !delta && <span className="text-[11.5px] text-muted-foreground">{hint}</span>}

@@ -380,6 +380,27 @@ export async function questions(req, res) {
   res.json({ success: true, data: items });
 }
 
+export async function reviews(req, res) {
+  const filter = { instructor: req.user._id };
+  if (req.query.course && mongoose.isValidObjectId(req.query.course)) filter._id = req.query.course;
+  const courses = await Course.find(filter).select("title slug ratingAvg ratingCount").lean();
+  const query = { course: { $in: courses.map((c) => c._id) } };
+  if (req.query.rating) query.rating = Number(req.query.rating);
+  const items = await Review.find(query).sort({ createdAt: -1 }).limit(200).populate("user", "name avatar").lean();
+  const byId = Object.fromEntries(courses.map((c) => [String(c._id), c]));
+  const all = await Review.find({ course: { $in: courses.map((c) => c._id) } }).select("rating").lean();
+  const breakdown = [5, 4, 3, 2, 1].map((n) => ({ rating: n, count: all.filter((r) => r.rating === n).length }));
+  const average = all.length ? Math.round((all.reduce((s, r) => s + r.rating, 0) / all.length) * 10) / 10 : 0;
+  res.json({
+    success: true,
+    data: {
+      items: items.map((r) => ({ ...r, course: byId[String(r.course)] })),
+      courses,
+      summary: { average, total: all.length, breakdown },
+    },
+  });
+}
+
 export async function earnings(req, res) {
   const pct = await share();
   const now = Date.now();
