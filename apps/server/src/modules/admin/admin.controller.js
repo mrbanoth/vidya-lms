@@ -61,6 +61,14 @@ export async function overview(_req, res) {
       Payout.countDocuments({ status: "requested" }),
       AuditLog.find().sort({ createdAt: -1 }).limit(6).lean(),
     ]);
+  const paid120 = await Order.find({ status: "paid", paidAt: { $gte: daysAgo(120) } }).select("paidAt total method").lean();
+  const gmvDaily = Array.from({ length: 120 }, (_, i) => ({ date: daysAgo(119 - i).toISOString().slice(0, 10), parts: [0, 0, 0] }));
+  const idx = new Map(gmvDaily.map((d, i) => [d.date, i]));
+  for (const o of paid120) {
+    const i = idx.get(o.paidAt.toISOString().slice(0, 10));
+    if (i === undefined) continue;
+    gmvDaily[i].parts[o.method === "upi" ? 0 : o.method === "card" ? 1 : 2] += o.total;
+  }
   const days = Array.from({ length: 30 }, (_, i) => {
     const d = daysAgo(29 - i).toISOString().slice(0, 10);
     return { day: d, count: signups.filter((u) => u.createdAt.toISOString().startsWith(d)).length };
@@ -78,6 +86,7 @@ export async function overview(_req, res) {
       refundsPending,
       payoutsPending,
       signups: days,
+      gmvDaily: gmvDaily.map((d) => ({ ...d, parts: d.parts.map(round2) })),
       revenueByCategory: revenueByCat,
       recent,
       totals: {

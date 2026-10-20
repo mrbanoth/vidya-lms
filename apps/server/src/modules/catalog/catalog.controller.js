@@ -51,6 +51,20 @@ export async function listCourses(req, res) {
   res.json({ success: true, data: items, meta: pageMeta(total, q.page, q.limit) });
 }
 
+/** Course cards by id, for a signed-out visitor's local cart. */
+export async function batch(req, res) {
+  const ids = String(req.query.ids || "")
+    .split(",")
+    .filter((id) => mongoose.isValidObjectId(id))
+    .slice(0, 20);
+  const items = await Course.find({ _id: { $in: ids }, status: "published" })
+    .select(CARD_FIELDS)
+    .populate("instructor", "name avatar")
+    .populate("category", "name slug")
+    .lean();
+  res.json({ success: true, data: items });
+}
+
 export async function featured(_req, res) {
   const [bestsellers, newest, categories, stats] = await Promise.all([
     Course.find({ status: "published" })

@@ -18,6 +18,7 @@ const routes = {
     "GET /categories",
     "GET /categories/:slug",
     "GET /courses",
+    "GET /courses-batch?ids=",
     "GET /courses/:slug",
     "GET /courses/:slug/related",
     "GET /courses/:slug/reviews",

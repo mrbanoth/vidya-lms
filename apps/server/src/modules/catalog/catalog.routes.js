@@ -11,6 +11,7 @@ r.get("/home", c.featured);
 r.get("/stats", c.publicStats);
 r.get("/categories", c.listCategories);
 r.get("/categories/:slug", c.getCategory);
+r.get("/courses-batch", c.batch);
 r.get("/courses", validate(courseQuerySchema, "query"), c.listCourses);
 r.get("/courses/:slug", optionalAuth, c.getCourse);
 r.get("/courses/:slug/related", c.related);

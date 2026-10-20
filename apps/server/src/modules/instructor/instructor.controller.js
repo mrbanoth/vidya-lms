@@ -262,9 +262,9 @@ export async function dashboard(req, res) {
   const id = req.user._id;
   const pct = await share();
   const now = Date.now();
-  const since12w = new Date(now - 84 * 864e5);
+  const since12w = new Date(now - 120 * 864e5);
   const [courses, sales, recentReviews, openQuestions, newStudents30, newStudentsPrev] = await Promise.all([
-    Course.find({ instructor: id }).select("title ratingAvg ratingCount studentsCount status").lean(),
+    Course.find({ instructor: id }).select("_id title ratingAvg ratingCount studentsCount status").lean(),
     instructorSales(id, { paidAt: { $gte: since12w } }),
     Review.find({ course: { $in: await Course.find({ instructor: id }).distinct("_id") } })
       .sort({ createdAt: -1 })
@@ -292,6 +292,15 @@ export async function dashboard(req, res) {
     const idx = 11 - Math.floor((now - new Date(s.paidAt).getTime()) / (7 * 864e5));
     if (idx >= 0 && idx < 12) weeks[idx].revenue += s.items.price * pct;
   }
+  const dayKey = (d) => new Date(d).toISOString().slice(0, 10);
+  const daily = Array.from({ length: 120 }, (_, i) => ({ date: dayKey(now - (119 - i) * 864e5), parts: [0, 0] }));
+  const dayIndex = new Map(daily.map((d, i) => [d.date, i]));
+  const top = courses.slice().sort((a, b) => b.studentsCount - a.studentsCount)[0];
+  for (const s of sales) {
+    const i = dayIndex.get(dayKey(s.paidAt));
+    if (i === undefined) continue;
+    daily[i].parts[top && String(s.items.course) === String(top._id) ? 0 : 1] += round2(s.items.price * pct);
+  }
   const last30 = sales.filter((s) => now - new Date(s.paidAt).getTime() < 30 * 864e5);
   const prev30 = sales.filter((s) => {
     const age = now - new Date(s.paidAt).getTime();
@@ -315,6 +324,8 @@ export async function dashboard(req, res) {
       refundRate: last30.length ? round2((refunds / (last30.length + refunds)) * 100) : 0,
       totalStudents: courses.reduce((t, c) => t + c.studentsCount, 0),
       weekly: weeks.map((w) => ({ ...w, revenue: round2(w.revenue) })),
+      daily: daily.map((d) => ({ ...d, parts: d.parts.map(round2) })),
+      dailySegments: [top?.title || "Top course", "Other courses"],
       byCourse: Object.entries(byCourse)
         .map(([title, revenue]) => ({ title, revenue: round2(revenue) }))
         .sort((a, b) => b.revenue - a.revenue)
