@@ -1,0 +1,12 @@
+node_modules/
+dist/
+coverage/
+.env
+.env.*
+!.env.example
+uploads/*
+!uploads/.gitkeep
+*.log
+.DS_Store
+.vscode/*
+!.vscode/extensions.json

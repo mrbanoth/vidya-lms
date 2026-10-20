@@ -1,0 +1,35 @@
+{
+  "name": "vidya-lms",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Full-stack Learning Management System built with the MERN stack.",
+  "author": "mrbanoth",
+  "license": "MIT",
+  "type": "module",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "concurrently -n server,client -c green,cyan \"npm run dev -w @vidya/server\" \"npm run dev -w @vidya/client\"",
+    "build": "npm run build -w @vidya/client",
+    "start": "npm run start -w @vidya/server",
+    "seed": "npm run seed -w @vidya/server",
+    "test": "npm run test -w @vidya/server && npm run test -w @vidya/client",
+    "lint": "eslint .",
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.17.0",
+    "concurrently": "^9.1.2",
+    "eslint": "^9.17.0",
+    "eslint-plugin-react-hooks": "^5.1.0",
+    "eslint-plugin-react-refresh": "^0.4.16",
+    "globals": "^15.14.0",
+    "prettier": "^3.4.2",
+    "prettier-plugin-tailwindcss": "^0.6.9"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
