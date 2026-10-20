@@ -4,7 +4,7 @@ import { PageHeader, Skeleton } from "@/components/ui";
 import { cn } from "@/lib/utils";
 import { get } from "@/lib/api";
 import { useTitle } from "@/hooks/useTitle";
-import CatalogView from "./CatalogView";
+import CatalogView from "@/components/course/CatalogView";
 import NotFound from "./NotFound";
 
 export default function Category() {

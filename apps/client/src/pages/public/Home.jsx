@@ -5,7 +5,6 @@ import { motion } from "motion/react";
 import { ArrowRight, BadgeCheck, Code2, Gauge, Search } from "lucide-react";
 import BackgroundPaths from "@/components/kokonut/background-paths";
 import TypewriterTitle from "@/components/kokonut/type-writer";
-import GradientButton from "@/components/kokonut/gradient-button";
 import { Avatar, Badge, Button, Progress, Stars } from "@/components/ui";
 import { CourseGrid } from "@/components/course/CourseCard";
 import { get } from "@/lib/api";
@@ -238,7 +237,7 @@ export default function Home() {
             <h2 className="text-3xl font-bold">Teach what you know</h2>
             <p className="max-w-[52ch] opacity-75">Keep 70% of every sale. We handle payments, video hosting and certificates.</p>
           </div>
-          <GradientButton variant="emerald" onClick={() => navigate("/teach")} label="Become an instructor" />
+          <Button size="lg" onClick={() => navigate("/teach")}>Become an instructor</Button>
         </div>
       </section>
     </div>

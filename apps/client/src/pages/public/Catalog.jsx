@@ -1,6 +1,6 @@
 import { PageHeader } from "@/components/ui";
 import { useTitle } from "@/hooks/useTitle";
-import CatalogView from "./CatalogView";
+import CatalogView from "@/components/course/CatalogView";
 
 export default function Catalog() {
   useTitle("All courses");

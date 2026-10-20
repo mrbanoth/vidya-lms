@@ -8,12 +8,6 @@ export function TrendChart({ data, x, y, height = 220, format = compact, prefix 
     <div style={{ height }} className="w-full min-w-0">
       <ResponsiveContainer>
         <AreaChart data={data} margin={{ top: 8, right: 12, left: 0, bottom: 0 }}>
-          <defs>
-            <linearGradient id="trend-fill" x1="0" x2="0" y1="0" y2="1">
-              <stop offset="0%" stopColor="var(--primary)" stopOpacity={0.3} />
-              <stop offset="100%" stopColor="var(--primary)" stopOpacity={0.02} />
-            </linearGradient>
-          </defs>
           <CartesianGrid stroke="var(--border)" strokeDasharray="3 3" vertical={false} />
           <XAxis dataKey={x} tick={{ fill: "var(--muted-foreground)", fontSize: 11 }} tickLine={false} axisLine={false} minTickGap={24} />
           <YAxis tick={{ fill: "var(--muted-foreground)", fontSize: 11 }} tickLine={false} axisLine={false} width={48} tickFormatter={(v) => `${prefix}${format(v)}`} />
@@ -27,7 +21,7 @@ export function TrendChart({ data, x, y, height = 220, format = compact, prefix 
             dataKey={y}
             stroke="var(--primary)"
             strokeWidth={2.2}
-            fill="url(#trend-fill)"
+            fill="var(--primary)" fillOpacity={0.08}
             dot={(p) => (p.index === data.length - 1 ? <circle key="end" cx={p.cx} cy={p.cy} r={4.5} fill="var(--primary)" stroke="var(--card)" strokeWidth={2} /> : null)}
             activeDot={{ r: 4 }}
           />

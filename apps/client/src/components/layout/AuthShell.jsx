@@ -8,7 +8,6 @@ export default function AuthShell({ children, quote = "Finished my first full co
   return (
     <div className="grid min-h-dvh lg:grid-cols-2">
       <aside className="relative hidden overflow-hidden bg-ink p-10 text-ink-foreground lg:grid lg:content-between">
-        <span aria-hidden className="pointer-events-none absolute -right-32 -top-32 size-[28rem] rounded-full bg-primary/25 blur-3xl" />
         <Logo inverted className="relative text-ink-foreground" />
         <figure className="relative grid gap-4">
           <blockquote className="font-display text-[clamp(1.5rem,2.4vw,2rem)] font-semibold leading-snug">“{quote}”</blockquote>

@@ -1,5 +1,4 @@
 import { Link, useNavigate } from "react-router";
-import GradientButton from "@/components/kokonut/gradient-button";
 import { Button, Kpi } from "@/components/ui";
 import { useAuth } from "@/store/auth";
 import { useTitle } from "@/hooks/useTitle";
@@ -24,7 +23,7 @@ export default function Teach() {
           <h1 className="text-[clamp(2.2rem,5vw,3.4rem)] font-extrabold leading-[1.05]">Turn what you know into <span className="text-primary">a course people finish</span>.</h1>
           <p className="text-lg text-muted-foreground">Plan, record and publish with the studio. We handle payments, hosting, certificates and support.</p>
           <div className="flex flex-wrap gap-3">
-            <GradientButton variant="emerald" label="Start your first course" onClick={start} />
+            <Button size="lg" onClick={start}>Start your first course</Button>
             {user?.role !== "student" && user && <Button variant="outline" size="lg" asChild><Link to="/studio">Open studio</Link></Button>}
           </div>
           {user?.role === "student" && <p className="text-sm text-muted-foreground">Signed in as a learner. Contact us to switch your account to an instructor account.</p>}

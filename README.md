@@ -102,7 +102,17 @@ npm run seed
 npm run dev
 ```
 
-No MongoDB installed? Start one with Docker: `docker run -d -p 27017:27017 mongo:7`.
+No MongoDB installed? Use free **MongoDB Atlas** (below) or Docker: `docker run -d -p 27017:27017 mongo:7`.
+
+### Using MongoDB Atlas (free M0 cluster)
+
+1. In Atlas, create a project (e.g. `vidya-lms`), then **Create cluster → M0 Free**, pick a region near you (Mumbai `ap-south-1`).
+2. **Database Access → Add user** with a username and a generated password, role *Read and write to any database*.
+3. **Network Access → Add IP address**: your current IP for development (add your host's IPs or `0.0.0.0/0` when deploying).
+4. **Connect → Drivers → Node.js** and copy the `mongodb+srv://…` string.
+5. Put it in `apps/server/.env`, adding the database name before the `?`:
+   `MONGO_URI=mongodb+srv://USER:PASSWORD@cluster0.xxxxx.mongodb.net/vidya?retryWrites=true&w=majority`
+6. `npm run seed` then `npm run dev`. Collections appear under the `vidya` database in **Browse Collections**.
 
 Optional integrations, all off by default so the app runs with zero accounts:
 
@@ -137,7 +147,7 @@ vidya-lms/
 │  │     │  ├─ ui/            design-system primitives (Button, Field, Modal, DataTable…)
 │  │     │  ├─ kokonut/       Kokonut UI components (MIT)
 │  │     │  ├─ layout/        navbar, app shell, auth shell, search palette
-│  │     │  ├─ course/        course card, thumbnail, price
+│  │     │  ├─ course/        course card, catalog view, thumbnail, price
 │  │     │  ├─ player/        video player, curriculum, lesson tabs
 │  │     │  └─ studio/        curriculum builder, lesson editor, upload adapter
 │  │     ├─ features/         auth session, cart, notifications, certificates
@@ -199,7 +209,7 @@ docker compose exec api node apps/server/src/seed/index.js   # optional demo dat
 
 ## Credits
 
-- UI components from [Kokonut UI](https://kokonutui.com) by @dorianbaffier (MIT): ActionSearchBar, BackgroundPaths, CardFlip, FileUpload, GradientButton, HoldButton, Loader, MetricCard, ParticleButton, ProfileDropdown, SwitchButton and Typewriter. Their license is kept in `apps/client/src/components/kokonut/LICENSE`.
+- UI components from [Kokonut UI](https://kokonutui.com) by @dorianbaffier (MIT): ActionSearchBar, BackgroundPaths, CardFlip, FileUpload, HoldButton, Loader, MetricCard, ParticleButton, ProfileDropdown, SwitchButton and Typewriter. Their license is kept in `apps/client/src/components/kokonut/LICENSE`.
 - Sample lesson videos from Google's public test-video bucket (Blender Foundation films, CC-BY).
 
 ## License
