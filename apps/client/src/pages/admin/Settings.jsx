@@ -18,7 +18,9 @@ export default function AdminSettings() {
   const { data, isLoading } = useQuery({ queryKey: ["admin-settings"], queryFn: () => get("/admin/settings").then((r) => r.data) });
   const health = useQuery({ queryKey: ["health"], queryFn: () => get("/health"), refetchInterval: 30_000 });
   const [form, setForm] = useState(null);
-  useEffect(() => data && setForm({ platformName: data.platformName, supportEmail: data.supportEmail, revenueShare: data.revenueShare }), [data]);
+  useEffect(() => {
+    if (data) setForm({ platformName: data.platformName, supportEmail: data.supportEmail, revenueShare: data.revenueShare });
+  }, [data]);
   const save = useMutation({
     mutationFn: (body) => patch("/admin/settings", body),
     onSuccess: (r) => { toast.success(r.message || "Saved"); qc.invalidateQueries({ queryKey: ["admin-settings"] }); },

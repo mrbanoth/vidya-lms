@@ -5,56 +5,60 @@
 
 /* Vidya design tokens. Kokonut UI and shadcn components read the same names. */
 :root {
-  --background: #fafaf9;
-  --foreground: #111816;
+  --background: #f7f8fc;
+  --foreground: #0f172a;
   --card: #ffffff;
-  --card-foreground: #14201b;
+  --card-foreground: #0f172a;
   --popover: #ffffff;
-  --popover-foreground: #14201b;
-  --primary: #0f7a5c;
+  --popover-foreground: #0f172a;
+  --primary: #4f46e5;
   --primary-foreground: #ffffff;
-  --secondary: #f2f3f2;
-  --secondary-foreground: #14201b;
-  --muted: #f2f3f2;
-  --muted-foreground: #5b6b63;
-  --accent: #d7efe6;
-  --accent-foreground: #0b5e46;
-  --destructive: #c2424f;
+  --secondary: #f1f2f9;
+  --secondary-foreground: #0f172a;
+  --muted: #f1f3f9;
+  --muted-foreground: #64748b;
+  --accent: #eef0ff;
+  --accent-foreground: #4338ca;
+  --destructive: #e11d48;
   --destructive-foreground: #ffffff;
-  --warning: #b86a12;
-  --info: #2b5fb8;
-  --border: #e6e8e6;
-  --input: #dcdfdc;
-  --ring: #0f7a5c;
-  --ink: #0d1714;
-  --ink-foreground: #e8f1ec;
+  --success: #16a34a;
+  --warning: #d97706;
+  --info: #2563eb;
+  --border: #e7e9f2;
+  --input: #dfe2ee;
+  --ring: #4f46e5;
+  --hero: #f3f1ff;
+  --ink: #ffffff;
+  --ink-foreground: #334155;
   --radius: 0.75rem;
 }
 
 .dark {
-  --background: #0e1412;
-  --foreground: #e6eee9;
-  --card: #151d1a;
-  --card-foreground: #e6eee9;
-  --popover: #151d1a;
-  --popover-foreground: #e6eee9;
-  --primary: #3cc99a;
-  --primary-foreground: #06120d;
-  --secondary: #1c2622;
-  --secondary-foreground: #e6eee9;
-  --muted: #1c2622;
-  --muted-foreground: #97a8a0;
-  --accent: #163a2e;
-  --accent-foreground: #7fe0bd;
-  --destructive: #ef7480;
+  --background: #0b0d17;
+  --foreground: #e7e9f5;
+  --card: #12152a;
+  --card-foreground: #e7e9f5;
+  --popover: #151935;
+  --popover-foreground: #e7e9f5;
+  --primary: #818cf8;
+  --primary-foreground: #0b0d17;
+  --secondary: #1a1e38;
+  --secondary-foreground: #e7e9f5;
+  --muted: #1a1e38;
+  --muted-foreground: #9aa3c2;
+  --accent: #23285a;
+  --accent-foreground: #c7cbff;
+  --destructive: #fb7185;
   --destructive-foreground: #1a0a0c;
-  --warning: #f0a54a;
-  --info: #7aa6f0;
-  --border: #2a3631;
-  --input: #2a3631;
-  --ring: #3cc99a;
-  --ink: #070b0a;
-  --ink-foreground: #e6eee9;
+  --success: #4ade80;
+  --warning: #fbbf24;
+  --info: #60a5fa;
+  --border: #252a4a;
+  --input: #2b3156;
+  --ring: #818cf8;
+  --hero: #15183a;
+  --ink: #12152a;
+  --ink-foreground: #c3c8e6;
 }
 
 @theme inline {
@@ -75,6 +79,8 @@
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
   --color-warning: var(--warning);
+  --color-success: var(--success);
+  --color-hero: var(--hero);
   --color-info: var(--info);
   --color-border: var(--border);
   --color-input: var(--input);

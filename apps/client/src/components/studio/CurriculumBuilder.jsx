@@ -35,7 +35,9 @@ export default function CurriculumBuilder({ course, refresh }) {
   const [editing, setEditing] = useState(null);
   const [newSection, setNewSection] = useState("");
   const [newLesson, setNewLesson] = useState({});
-  useEffect(() => setSections(course.sections), [course.sections]);
+  useEffect(() => {
+    setSections(course.sections);
+  }, [course.sections]);
   const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 4 } }), useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }));
 
   const persistOrder = async (next) => {

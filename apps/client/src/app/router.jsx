@@ -5,6 +5,7 @@ import PublicLayout from "@/components/layout/PublicLayout";
 import AppLayout from "@/components/layout/AppLayout";
 import { FullPageLoader, GuestOnly, RequireAuth } from "./guards";
 import ScrollToTop from "./ScrollToTop";
+import RouteError from "./RouteError";
 
 const L = (factory) => {
   const C = lazy(factory);
@@ -27,6 +28,7 @@ function Root() {
 export const router = createBrowserRouter([
   {
     element: <Root />,
+    errorElement: <RouteError />,
     children: [
       {
         element: <PublicLayout />,
