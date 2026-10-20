@@ -10,7 +10,7 @@ import { get } from "@/lib/api";
 import { compact } from "@/lib/format";
 import { useTitle } from "@/hooks/useTitle";
 import { useConfig } from "@/hooks/useConfig";
-import HeroIllustration from "@/components/shared/HeroIllustration";
+import HeroShowcase from "@/components/course/HeroShowcase";
 import CategoryIcon from "@/components/course/CategoryIcon";
 
 const FEATURES = [
@@ -87,7 +87,7 @@ export default function Home() {
             )}
           </motion.div>
           <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.1 }} className="relative">
-            <HeroIllustration />
+            {data && <HeroShowcase courses={data.bestsellers} review={data.reviews?.[0]} />}
           </motion.div>
         </div>
       </section>

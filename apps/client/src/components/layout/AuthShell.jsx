@@ -1,7 +1,7 @@
 import { NavLink, useSearchParams } from "react-router";
 import { useQuery } from "@tanstack/react-query";
 import Logo from "./Logo";
-import HeroIllustration from "@/components/shared/HeroIllustration";
+import HeroShowcase from "@/components/course/HeroShowcase";
 import { get } from "@/lib/api";
 import { compact } from "@/lib/format";
 import { cn } from "@/lib/utils";
@@ -24,7 +24,8 @@ function AuthTabs() {
 }
 
 export default function AuthShell({ children, tabs = false, title = "Welcome back to Vidya" }) {
-  const { data } = useQuery({ queryKey: ["stats"], queryFn: () => get("/stats").then((r) => r.data), staleTime: 300_000 });
+  const { data: home } = useQuery({ queryKey: ["home"], queryFn: () => get("/home").then((r) => r.data), staleTime: 300_000 });
+  const data = home?.stats;
   return (
     <div className="grid min-h-dvh place-items-center bg-background px-4 py-8 sm:px-6">
       <div className="grid w-full max-w-5xl overflow-hidden rounded-2xl border border-border bg-card lg:grid-cols-[1.05fr_1fr]">
@@ -36,7 +37,7 @@ export default function AuthShell({ children, tabs = false, title = "Welcome bac
               <p className="text-muted-foreground">Learn. Teach. Grow.</p>
             </div>
           </div>
-          <HeroIllustration />
+          <HeroShowcase courses={home?.bestsellers?.slice(0, 1)} review={home?.reviews?.[0]} />
           <div className="flex gap-6 text-sm text-muted-foreground">
             {data?.courses > 0 && <span><b className="text-foreground">{compact(data.courses)}</b> courses</span>}
             {data?.learners > 0 && <span><b className="text-foreground">{compact(data.learners)}</b> learners</span>}
