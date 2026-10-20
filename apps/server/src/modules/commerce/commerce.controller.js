@@ -101,7 +101,7 @@ export async function checkout(req, res) {
   }
 
   const mode = gatewayMode();
-  if (mode === "test" && env.isProd)
+  if (mode === "test" && !env.testPaymentsAllowed)
     throw new ApiError(503, "Payments are not configured. Add Razorpay keys.");
   const order = await Order.create({
     user: req.user._id,
@@ -137,7 +137,7 @@ export async function verify(req, res) {
   if (order.status === "paid") return res.json({ success: true, data: order });
 
   if (order.gateway === "test") {
-    if (env.isProd) throw ApiError.badRequest("Test payments are disabled");
+    if (!env.testPaymentsAllowed) throw ApiError.badRequest("Test payments are disabled");
     await fulfil(order, { paymentId: `test_pay_${randomToken(6)}`, method: req.body.method || "test" });
     return res.json({ success: true, data: order });
   }

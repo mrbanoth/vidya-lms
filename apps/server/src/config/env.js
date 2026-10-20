@@ -17,6 +17,7 @@ const schema = z.object({
   SMTP_USER: z.string().optional().default(""),
   SMTP_PASS: z.string().optional().default(""),
   EMAIL_FROM: z.string().default("Vidya <no-reply@vidya.dev>"),
+  ALLOW_TEST_PAYMENTS: z.enum(["true", "false"]).default("false"),
   RAZORPAY_KEY_ID: z.string().optional().default(""),
   RAZORPAY_KEY_SECRET: z.string().optional().default(""),
   RAZORPAY_WEBHOOK_SECRET: z.string().optional().default(""),
@@ -40,6 +41,7 @@ export default Object.freeze({
   allowedOrigins: [env.CLIENT_URL, ...env.CORS_ORIGINS.split(",").map((s) => s.trim())].filter(
     Boolean
   ),
+  testPaymentsAllowed: env.NODE_ENV !== "production" || env.ALLOW_TEST_PAYMENTS === "true",
   paymentsLive: Boolean(env.RAZORPAY_KEY_ID && env.RAZORPAY_KEY_SECRET),
   cloudinaryEnabled: Boolean(
     env.CLOUDINARY_CLOUD_NAME && env.CLOUDINARY_API_KEY && env.CLOUDINARY_API_SECRET
