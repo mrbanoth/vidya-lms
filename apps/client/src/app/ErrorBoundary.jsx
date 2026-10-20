@@ -16,7 +16,7 @@ export default class ErrorBoundary extends Component {
         <div className="grid max-w-md justify-items-center gap-4">
           <span className="font-display text-7xl font-extrabold text-primary">500</span>
           <h1 className="text-2xl font-bold">Something broke on this page</h1>
-          <p className="text-muted-foreground">Reload to try again. If it keeps happening, tell us at support@vidya.dev.</p>
+          <p className="text-muted-foreground">Reload to try again. If it keeps happening, contact support from the Contact page.</p>
           <Button onClick={() => window.location.assign("/")}>Go home</Button>
         </div>
       </div>

@@ -11,6 +11,8 @@ import instructorRoutes from "./modules/instructor/instructor.routes.js";
 import adminRoutes from "./modules/admin/admin.routes.js";
 import { maintenance } from "./middlewares/maintenance.js";
 import { apiDocs } from "./docs/openapi.js";
+import { Setting } from "./models/index.js";
+import env from "./config/env.js";
 
 const api = Router();
 
@@ -23,6 +25,20 @@ api.get("/health", (_req, res) =>
   })
 );
 api.get("/docs", apiDocs);
+api.get("/config", async (_req, res) => {
+  const s = await Setting.get();
+  res.json({
+    success: true,
+    data: {
+      platformName: s.platformName,
+      supportEmail: s.supportEmail,
+      revenueShare: s.revenueShare,
+      instructorSignup: s.features.instructorSignup,
+      googleLogin: s.features.googleLogin && Boolean(env.GOOGLE_CLIENT_ID),
+      payments: env.paymentsLive ? "razorpay" : env.testPaymentsAllowed ? "test" : "off",
+    },
+  });
+});
 
 api.use("/auth", authRoutes);
 api.use("/admin", adminRoutes);

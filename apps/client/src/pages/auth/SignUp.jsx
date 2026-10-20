@@ -42,7 +42,7 @@ export default function SignUp() {
   };
 
   return (
-    <AuthShell quote="I published my first course in a weekend. The curriculum builder is a joy to use." author="Priya Raman, instructor">
+    <AuthShell>
       <div className="grid gap-1.5">
         <h1 className="text-3xl font-extrabold">Create your account</h1>
         <p className="text-muted-foreground">Free forever. No card needed.</p>

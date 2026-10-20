@@ -1,51 +1,57 @@
-import { useState } from "react";
 import { Link } from "react-router";
 import { Check } from "lucide-react";
-import { Badge, Button, Chip } from "@/components/ui";
+import { REFUND_WINDOW_DAYS } from "@vidya/shared";
+import { Button } from "@/components/ui";
+import { useConfig } from "@/hooks/useConfig";
 import { useTitle } from "@/hooks/useTitle";
-import { cn } from "@/lib/utils";
-
-const PLANS = [
-  { name: "Single course", price: [null, null], note: "one-time, from ₹399", features: ["Lifetime access to that course", "Quizzes and certificate", "Q&A with the instructor", "30-day money-back guarantee"], cta: ["Browse courses", "/courses"] },
-  { name: "Pro", hot: true, price: [699, 489], note: "per month", features: ["Every paid course", "All certificates", "Downloadable resources", "Priority Q&A answers", "Offline on mobile"], cta: ["Start learning", "/sign-up"] },
-  { name: "Teams", price: [549, 385], note: "per user / month", features: ["Everything in Pro", "Team dashboard and reports", "Assign learning paths", "SSO and invoices", "Dedicated support"], cta: ["Talk to sales", "/contact"] },
-];
-
-const FAQ = [
-  ["Can I get a refund?", "Yes. Every course purchase has a 30-day money-back guarantee. Request it from Orders."],
-  ["Which payment methods work?", "UPI, cards, net banking and wallets through Razorpay. GST invoices are generated automatically."],
-  ["Do I keep courses forever?", "Courses you buy are yours for life, including future updates."],
-  ["Do you have student discounts?", "Yes. Use code STUDENT40 at checkout for 40% off."],
-];
 
 export default function Pricing() {
   useTitle("Pricing");
-  const [yearly, setYearly] = useState(false);
+  const config = useConfig();
+  const PLANS = [
+    {
+      name: "Free courses",
+      price: "₹0",
+      note: "always",
+      features: ["Full access to every free course", "Quizzes and progress tracking", "Certificate when you finish", "Q&A with the instructor"],
+      cta: ["Browse free courses", "/courses?price=free"],
+    },
+    {
+      name: "Paid courses",
+      price: "Pay once",
+      note: "per course, price set by the instructor",
+      hot: true,
+      features: ["Lifetime access, including updates", "Quizzes, resources and certificate", "GST invoice for every order", `${REFUND_WINDOW_DAYS}-day refund if it is not for you`],
+      cta: ["Browse courses", "/courses"],
+    },
+    {
+      name: "Teach",
+      price: `${config.revenueShare}%`,
+      note: "of every sale goes to you",
+      features: ["Course builder with video, articles and quizzes", "Live earnings and student analytics", "Withdraw to UPI", "We handle hosting, payments and certificates"],
+      cta: ["Start teaching", "/teach"],
+    },
+  ];
+  const FAQ = [
+    ["Can I get a refund?", `Yes. Request it from Orders within ${REFUND_WINDOW_DAYS} days of buying.`],
+    ["Which payment methods work?", "UPI, cards, net banking and wallets through Razorpay. A GST invoice is created for every order."],
+    ["Do I keep a course forever?", "Yes. Courses you buy are yours for life, including future updates."],
+    ["Are there discounts?", "Instructors run sales on their courses, and coupon codes are shared on our channels from time to time."],
+  ];
   return (
     <div className="container-page grid gap-14 py-12">
       <div className="grid justify-items-center gap-4 text-center">
         <span className="eyebrow">Pricing</span>
-        <h1 className="text-[clamp(2rem,4.5vw,3rem)] font-extrabold">Buy one course or learn everything</h1>
-        <p className="max-w-[55ch] text-muted-foreground">Single courses are a one-time payment with lifetime access. Pro unlocks the full catalog.</p>
-        <div className="flex gap-2">
-          <Chip active={!yearly} onClick={() => setYearly(false)}>Monthly</Chip>
-          <Chip active={yearly} onClick={() => setYearly(true)}>Yearly · save 30%</Chip>
-        </div>
+        <h1 className="text-[clamp(2rem,4.5vw,3rem)] font-extrabold">No subscription. Pay for what you learn.</h1>
+        <p className="max-w-[55ch] text-muted-foreground">Every course shows its price up front. Buy once and keep it for life.</p>
       </div>
       <div className="grid gap-5 md:grid-cols-3">
         {PLANS.map((p) => (
-          <div key={p.name} className={cn("grid content-start gap-5 rounded-2xl border bg-card p-7", p.hot ? "border-2 border-primary shadow-[0_24px_60px_-30px_rgba(15,122,92,.6)]" : "border-border")}>
-            <div className="flex items-center justify-between">
-              <h2 className="text-xl font-bold">{p.name}</h2>
-              {p.hot && <Badge>Most popular</Badge>}
-            </div>
-            <div>
-              <span className="font-display text-4xl font-extrabold">{p.price[0] ? `₹${yearly ? p.price[1] : p.price[0]}` : "Pay once"}</span>{" "}
-              <span className="text-muted-foreground">{p.note}</span>
-              {yearly && p.price[0] && <p className="text-xs text-muted-foreground">Billed yearly</p>}
-            </div>
+          <div key={p.name} className={p.hot ? "grid content-start gap-5 rounded-2xl border-2 border-primary bg-card p-7" : "grid content-start gap-5 rounded-2xl border border-border bg-card p-7"}>
+            <h2 className="text-xl font-bold">{p.name}</h2>
+            <div><span className="font-display text-4xl font-extrabold">{p.price}</span> <span className="text-muted-foreground">{p.note}</span></div>
             <ul className="grid gap-2.5 text-sm">
-              {p.features.map((f) => <li key={f} className="flex gap-2"><Check className="size-4 text-primary" />{f}</li>)}
+              {p.features.map((f) => <li key={f} className="flex gap-2"><Check className="size-4 shrink-0 text-primary" />{f}</li>)}
             </ul>
             <Button variant={p.hot ? "default" : "outline"} size="lg" asChild><Link to={p.cta[1]}>{p.cta[0]}</Link></Button>
           </div>

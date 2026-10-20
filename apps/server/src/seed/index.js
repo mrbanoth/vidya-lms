@@ -275,6 +275,10 @@ export async function seed({ quiet = false } = {}) {
 }
 
 if (process.argv[1]?.endsWith("seed/index.js")) {
+  if (process.env.NODE_ENV === "production" && process.env.SEED_FORCE !== "true") {
+    console.error("Refusing to seed demo data in production: it wipes every collection. Set SEED_FORCE=true to override.");
+    process.exit(1);
+  }
   connectDB()
     .then(() => seed())
     .then(() => mongoose.disconnect())

@@ -2,17 +2,19 @@ import { Link, useNavigate } from "react-router";
 import { Button, Kpi } from "@/components/ui";
 import { useAuth } from "@/store/auth";
 import { useTitle } from "@/hooks/useTitle";
+import { useConfig } from "@/hooks/useConfig";
 
 const STEPS = [
   ["Plan", "Outline sections and lessons in the drag-and-drop curriculum builder."],
   ["Record", "Upload videos, articles and quizzes. We host and stream them."],
   ["Submit", "Our team reviews quality within 48 hours."],
-  ["Earn", "Keep 70% of every sale and withdraw to UPI any time."],
+  ["Earn", "Keep your share of every sale and withdraw to UPI."],
 ];
 
 export default function Teach() {
   useTitle("Teach on Vidya");
   const user = useAuth((s) => s.user);
+  const config = useConfig();
   const navigate = useNavigate();
   const start = () => navigate(!user ? "/sign-up?role=instructor" : user.role === "student" ? "/contact" : "/studio/courses/new");
   return (
@@ -29,8 +31,8 @@ export default function Teach() {
           {user?.role === "student" && <p className="text-sm text-muted-foreground">Signed in as a learner. Contact us to switch your account to an instructor account.</p>}
         </div>
         <div className="grid grid-cols-2 gap-3">
-          <Kpi label="Revenue share" value="70%" />
-          <Kpi label="Review time" value="48 h" />
+          <Kpi label="Your revenue share" value={`${config.revenueShare}%`} />
+          <Kpi label="Refund hold" value="30 days" />
           <Kpi label="Payout minimum" value="₹500" />
           <Kpi label="Payout method" value="UPI" />
         </div>

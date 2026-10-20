@@ -2,11 +2,13 @@ import http from "node:http";
 import env from "./config/env.js";
 import { connectDB, disconnectDB } from "./config/db.js";
 import { createApp } from "./app.js";
+import { bootstrap } from "./services/bootstrap.js";
 import { initSockets } from "./sockets/index.js";
 import logger from "./utils/logger.js";
 
 async function start() {
   await connectDB();
+  await bootstrap();
   const server = http.createServer(createApp());
   initSockets(server);
   server.listen(env.PORT, () => logger.info(`API ready on http://localhost:${env.PORT}/api/v1`));

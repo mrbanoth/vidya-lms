@@ -5,9 +5,11 @@ import { contactSchema } from "@vidya/shared";
 import { Button, Card, Field, Input, Select, Spinner, Textarea } from "@/components/ui";
 import { errorMessage, post } from "@/lib/api";
 import { useTitle } from "@/hooks/useTitle";
+import { useConfig } from "@/hooks/useConfig";
 
 export default function Contact() {
   useTitle("Contact");
+  const config = useConfig();
   const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm({
     resolver: zodResolver(contactSchema),
     defaultValues: { topic: "Course question" },
@@ -28,7 +30,7 @@ export default function Contact() {
         <h1 className="text-[clamp(2rem,4.5vw,3rem)] font-extrabold">Talk to us</h1>
         <p className="text-muted-foreground">We reply within one working day.</p>
         <Card className="grid gap-4">
-          {[["Support", "support@vidya.dev"], ["Teams and sales", "sales@vidya.dev"], ["Office", "HITEC City, Hyderabad, Telangana 500081"]].map(([k, v]) => (
+          {[["Support email", config.supportEmail || "Use the form"], ["Response time", "Within one working day"]].map(([k, v]) => (
             <div key={k} className="grid gap-0.5">
               <span className="text-xs text-muted-foreground">{k}</span>
               <span className="select-all font-mono text-sm">{v}</span>

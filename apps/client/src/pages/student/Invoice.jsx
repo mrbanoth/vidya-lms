@@ -6,9 +6,11 @@ import Logo from "@/components/layout/Logo";
 import { get } from "@/lib/api";
 import { date, money } from "@/lib/format";
 import { useTitle } from "@/hooks/useTitle";
+import { useConfig } from "@/hooks/useConfig";
 
 export default function Invoice() {
   const { id } = useParams();
+  const config = useConfig();
   const { data: o, isLoading } = useQuery({ queryKey: ["order", id], queryFn: () => get(`/orders/${id}`).then((r) => r.data) });
   useTitle(o ? `Invoice ${o.invoiceNo}` : "Invoice");
   if (isLoading) return <Skeleton className="h-96" />;
@@ -23,7 +25,7 @@ export default function Invoice() {
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div className="grid gap-1">
             <Logo />
-            <span className="text-xs text-muted-foreground">Vidya Learning Pvt. Ltd. · HITEC City, Hyderabad 500081<br />GSTIN 36ABCDE1234F1Z5</span>
+            <span className="text-xs text-muted-foreground">{config.platformName}{config.supportEmail ? ` · ${config.supportEmail}` : ""}</span>
           </div>
           <div className="grid gap-1 text-right">
             <h1 className="text-2xl font-extrabold">Tax invoice</h1>

@@ -200,7 +200,7 @@ docker compose exec api node apps/server/src/seed/index.js   # optional demo dat
 # open http://localhost:5000
 ```
 
-**Render + Atlas (recommended, free):** follow [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md). `render.yaml` sets everything up as one service.
+**Render + Atlas (recommended, free):** follow [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md). `render.yaml` sets everything up as one service. Production starts empty: the server creates starter categories and your admin account from `ADMIN_EMAIL` / `ADMIN_PASSWORD`; demo data is for local development only.
 
 **Separate hosting:** deploy `apps/client` to Vercel or Netlify with `VITE_API_URL=https://your-api`, and `apps/server` to Render or Railway with `CLIENT_URL` set to the web app's URL and `COOKIE_SAMESITE=none` (HTTPS required). Point Razorpay webhooks to `POST /api/v1/payments/webhook`.
 

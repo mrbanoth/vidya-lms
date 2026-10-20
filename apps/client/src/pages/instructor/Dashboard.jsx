@@ -19,7 +19,7 @@ export default function InstructorDashboard() {
     <>
       <PageHeader
         title={`Welcome back, ${user.name.split(" ")[0]}`}
-        description={d ? `${num(d.totalStudents)} learners across ${d.courses} courses.` : " "}
+        description={d ? `${num(d.totalStudents)} learner${d.totalStudents === 1 ? "" : "s"} across ${d.courses} course${d.courses === 1 ? "" : "s"}.` : " "}
         actions={<Button asChild><Link to="/studio/courses/new"><Plus /> New course</Link></Button>}
       />
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">

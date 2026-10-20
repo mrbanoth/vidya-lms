@@ -1,39 +1,65 @@
-# Deploying Vidya (MongoDB Atlas + Render)
+# Deploying Vidya with real data (MongoDB Atlas + Render)
 
-The API serves the built React app, so the whole site runs as **one Render web service** on one URL.
+Production starts **empty**: no demo users, courses or orders. On first start the server creates platform settings, six starter categories (editable in Admin → Categories) and **your admin account** from `ADMIN_EMAIL` / `ADMIN_PASSWORD`. Everything else comes from real people using the site.
+
+> Never run `npm run seed` against production. It wipes every collection (the script refuses unless `SEED_FORCE=true`).
 
 ## 1. MongoDB Atlas
-1. Create a project and an **M0 Free** cluster (region `ap-south-1` Mumbai).
-2. **Database Access** → add user (read/write to any database). Save the password.
-3. **Network Access** → add `0.0.0.0/0` (Render free instances have no fixed IP).
-4. **Connect → Drivers** → copy the string and add `/vidya` before `?`:
-   `mongodb+srv://USER:PASS@cluster0.xxxxx.mongodb.net/vidya?retryWrites=true&w=majority`
+1. Create project `vidya-lms` → **Create cluster → M0 Free**, region Mumbai (`ap-south-1`).
+2. **Database Access → Add user** `vidya`, autogenerate password, role *Read and write to any database*.
+3. **Network Access → Add IP → Allow access from anywhere** (`0.0.0.0/0`). Render free has no fixed IP.
+4. **Connect → Drivers** → copy the string, add `/vidya` before `?`:
+   `mongodb+srv://vidya:PASSWORD@cluster0.xxxxx.mongodb.net/vidya?retryWrites=true&w=majority`
+   If the password has `@ : / ? #`, URL-encode it (e.g. `@` → `%40`).
 
-## 2. Seed demo data (once, from your laptop)
-```bash
-# apps/server/.env → MONGO_URI=<the Atlas string>
-npm install
-npm run seed
-```
+## 2. Email (required: sign-up uses a 6-digit email code)
+Use **Brevo** (free 300 emails/day):
+1. brevo.com → sign up → **Senders & IP → Senders → Add a sender** with your email and verify it.
+2. **SMTP & API → SMTP** → note the login and **Generate a new SMTP key**.
+3. Values: `SMTP_HOST=smtp-relay.brevo.com`, `SMTP_PORT=587`, `SMTP_USER=<SMTP login>`, `SMTP_PASS=<SMTP key>`, `EMAIL_FROM=Vidya <the-verified-sender@email>`.
 
-## 3. Render
-1. Sign in at render.com with GitHub → **New → Blueprint** → select `mrbanoth/vidya-lms`. Render reads `render.yaml`.
+(Gmail also works: 2-step verification → App passwords; `SMTP_HOST=smtp.gmail.com`, user = your Gmail, pass = app password.)
+
+## 3. Payments: Razorpay (test mode is a real flow, no real money)
+1. razorpay.com → sign up → switch to **Test Mode** → **Account & Settings → API Keys → Generate**.
+2. `RAZORPAY_KEY_ID=rzp_test_…`, `RAZORPAY_KEY_SECRET=…`
+3. After the first deploy: **Webhooks → Add** URL `https://<your-app>.onrender.com/api/v1/payments/webhook`, events `payment.captured` and `payment.failed`, set a secret → `RAZORPAY_WEBHOOK_SECRET`.
+4. Test cards/UPI: card `4111 1111 1111 1111`, any future expiry, any CVV; UPI `success@razorpay`.
+5. Going live later: complete Razorpay KYC and swap in `rzp_live_` keys.
+
+## 4. Media: Cloudinary (keeps uploads across deploys)
+cloudinary.com → free account → Dashboard shows **Cloud name, API key, API secret** → `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET`. Without it, uploaded videos and thumbnails are deleted on every Render deploy (links to YouTube still work).
+
+## 5. Render
+1. render.com → sign in with GitHub → **New → Blueprint** → choose `mrbanoth/vidya-lms`.
 2. Fill the prompted values:
-   - `MONGO_URI` = Atlas string
-   - `CLIENT_URL` = `https://vidya-lms.onrender.com` (your service URL; update it after the first deploy if Render picks another name)
-   - Leave Razorpay / Cloudinary / SMTP empty for now
-3. **Apply**. The first build takes ~5 minutes. Open the URL and sign in with `student@vidya.dev` / `Password123`.
 
-With `ALLOW_TEST_PAYMENTS=true` and no Razorpay keys, checkout shows the simulated payment so the demo works end to end. Set it to `false` once real keys are in.
+| Key | Value |
+| --- | --- |
+| `MONGO_URI` | Atlas string from step 1 |
+| `CLIENT_URL` | `https://vidya-lms.onrender.com` (use the exact service URL Render shows) |
+| `ADMIN_NAME` / `ADMIN_EMAIL` / `ADMIN_PASSWORD` | your name, email, a strong password (8+ chars) |
+| `SMTP_HOST` `SMTP_USER` `SMTP_PASS` `EMAIL_FROM` | from step 2 |
+| `RAZORPAY_KEY_ID` `RAZORPAY_KEY_SECRET` `RAZORPAY_WEBHOOK_SECRET` | from step 3 (webhook secret can be added after) |
+| `CLOUDINARY_*` | from step 4 |
 
-## 4. Optional upgrades
-| Feature | Env vars | Where to get them |
-| --- | --- | --- |
-| Real payments | `RAZORPAY_KEY_ID`, `RAZORPAY_KEY_SECRET`, `RAZORPAY_WEBHOOK_SECRET` | Razorpay Dashboard → API Keys (test mode first). Webhook URL: `https://<your-url>/api/v1/payments/webhook`, events `payment.captured`, `payment.failed` |
-| Uploads that survive restarts | `CLOUDINARY_*` | cloudinary.com → Dashboard. Render's free disk is wiped on every deploy |
-| Real emails (OTP, receipts) | `SMTP_HOST`, `SMTP_PORT=587`, `SMTP_USER`, `SMTP_PASS` | Brevo or Gmail app password. Without SMTP, sign-up codes only appear in Render logs |
-| Google sign-in | `GOOGLE_CLIENT_ID` (server) and `VITE_GOOGLE_CLIENT_ID` (build) | Google Cloud Console → OAuth client, origin = your URL |
+`JWT_*` secrets are generated by Render. `ALLOW_TEST_PAYMENTS` stays `false`.
+3. **Apply** and wait for the build (~5 min). Logs should show `Created starter categories`, `Created first admin account`, `API ready`.
 
-## Notes
-- Free Render services sleep after 15 minutes idle; the first request takes ~50 s.
-- Logs: Render → service → **Logs**. Health: `/api/v1/health`.
+## 6. Go live checklist
+1. Open the URL → **Sign in** with your admin email → Admin → **Settings**: set platform name and support email.
+2. Admin → **Categories**: rename or add categories.
+3. Sign out → **Start free → I want to teach** with another email → enter the emailed code → **New course** → add lessons (upload or YouTube link), price, thumbnail → **Submit for review**.
+4. Admin → **Course review → Approve & publish**. The course is now on the home page and catalog.
+5. Sign up as a learner → buy it with a Razorpay test card → learn → quiz → certificate.
+6. Instructor dashboard and Admin overview now show real numbers.
+
+## Troubleshooting
+| Symptom | Fix |
+| --- | --- |
+| Build OK, app crashes with `Invalid environment variables` | A required env var is missing or too short; the log names it |
+| `MongooseServerSelectionError` | Atlas Network Access missing `0.0.0.0/0`, or wrong password in `MONGO_URI` |
+| Sign-up code never arrives | Check SMTP values and that `EMAIL_FROM` uses the verified sender; Render logs show `Email failed` |
+| Payment says "Payments are not configured" | Razorpay keys missing |
+| Signed out after refresh | `CLIENT_URL` must match the exact site URL (https) |
+| First load takes ~50 s | Render free instances sleep after 15 min idle; a paid instance stays awake |

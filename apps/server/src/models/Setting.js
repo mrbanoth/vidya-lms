@@ -4,7 +4,7 @@ const settingSchema = new mongoose.Schema(
   {
     key: { type: String, default: "platform", unique: true },
     platformName: { type: String, default: "Vidya" },
-    supportEmail: { type: String, default: "support@vidya.dev" },
+    supportEmail: { type: String, default: "" },
     revenueShare: { type: Number, default: 70 },
     features: {
       instructorSignup: { type: Boolean, default: true },

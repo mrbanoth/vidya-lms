@@ -12,9 +12,11 @@ import { uploadTo } from "@/components/studio/uploadTo";
 import { del, errorMessage, get, patch, post } from "@/lib/api";
 import { money } from "@/lib/format";
 import { useTitle } from "@/hooks/useTitle";
+import { useConfig } from "@/hooks/useConfig";
 import { cn } from "@/lib/utils";
 
 function Pricing({ course, onSave }) {
+  const config = useConfig();
   const [price, setPrice] = useState(course.price);
   const [discount, setDiscount] = useState(course.discountPrice ?? "");
   const [busy, setBusy] = useState(false);
@@ -35,7 +37,7 @@ function Pricing({ course, onSave }) {
       )}
       <div className="grid gap-1 rounded-xl bg-muted p-4 text-sm">
         <div className="flex justify-between"><span className="text-muted-foreground">Learner pays (before GST)</span><b>{money(effective)}</b></div>
-        <div className="flex justify-between"><span className="text-muted-foreground">You earn per sale (70%)</span><b className="text-primary">{money(effective * 0.7)}</b></div>
+        <div className="flex justify-between"><span className="text-muted-foreground">You earn per sale ({config.revenueShare}%)</span><b className="text-primary">{money((effective * config.revenueShare) / 100)}</b></div>
       </div>
       <Button
         className="justify-self-start"

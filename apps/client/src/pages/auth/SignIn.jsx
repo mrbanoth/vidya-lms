@@ -71,8 +71,9 @@ export default function SignIn() {
         {formError && <p role="alert" className="rounded-lg bg-destructive/10 px-3 py-2 text-sm text-destructive">{formError}</p>}
         <Button type="submit" size="lg" disabled={isSubmitting}>{isSubmitting && <Spinner />} Sign in</Button>
       </form>
+      {import.meta.env.DEV && (
       <div className="grid gap-2 rounded-xl border border-dashed border-border p-3 text-center text-xs text-muted-foreground">
-        <span>Demo accounts (password <b className="font-mono">Password123</b>)</span>
+        <span>Seeded dev accounts (password <b className="font-mono">Password123</b>)</span>
         <div className="flex flex-wrap justify-center gap-1.5">
           {DEMO.map(([label, email]) => (
             <button
@@ -89,6 +90,7 @@ export default function SignIn() {
           ))}
         </div>
       </div>
+      )}
       <p className="text-center text-sm text-muted-foreground">
         New to Vidya? <Link to={`/sign-up${next ? `?next=${encodeURIComponent(next)}` : ""}`} className="font-semibold text-primary hover:underline">Create an account</Link>
       </p>

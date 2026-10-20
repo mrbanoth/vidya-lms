@@ -2,15 +2,16 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "motion/react";
-import { ArrowRight, BadgeCheck, Code2, Gauge, Search } from "lucide-react";
+import { ArrowRight, BadgeCheck, Code2, Gauge, GraduationCap, Search } from "lucide-react";
 import BackgroundPaths from "@/components/kokonut/background-paths";
 import TypewriterTitle from "@/components/kokonut/type-writer";
-import { Avatar, Badge, Button, Progress, Stars } from "@/components/ui";
+import { Avatar, Badge, Button, EmptyState, Progress, Stars } from "@/components/ui";
 import { CourseGrid } from "@/components/course/CourseCard";
 import { get } from "@/lib/api";
 import { compact } from "@/lib/format";
 import { useAuth } from "@/store/auth";
 import { useTitle } from "@/hooks/useTitle";
+import { useConfig } from "@/hooks/useConfig";
 
 const FEATURES = [
   [Code2, "Learn by building", "Every course ends with a real project you can push to GitHub and show in interviews."],
@@ -28,14 +29,11 @@ function ContinueCard() {
   const current = data?.find((e) => e.progress < 100) || data?.[0];
   if (!user || !current)
     return (
-      <div className="col-span-2 grid gap-2 rounded-2xl bg-ink p-5 text-ink-foreground">
-        <span className="text-xs opacity-70">Most popular path</span>
-        <b className="font-display text-xl">MERN Stack from Zero to Deploy</b>
-        <Progress value={64} className="bg-white/15" />
-        <div className="flex items-center justify-between text-xs opacity-75">
-          <span>12,480 learners · 4.8 ★</span>
-          <Link to="/courses" className="font-semibold text-primary">Explore →</Link>
-        </div>
+      <div className="col-span-2 grid gap-3 rounded-2xl bg-ink p-5 text-ink-foreground">
+        <span className="text-xs opacity-70">How it works</span>
+        <b className="font-display text-xl">Enroll, learn at your pace, earn a certificate</b>
+        <p className="text-sm opacity-70">Short lessons, quizzes after each section and a verifiable certificate when you finish.</p>
+        <Link to={user ? "/courses" : "/sign-up"} className="text-sm font-semibold text-primary">{user ? "Browse courses →" : "Create a free account →"}</Link>
       </div>
     );
   return (
@@ -55,6 +53,7 @@ function ContinueCard() {
 
 export default function Home() {
   useTitle();
+  const config = useConfig();
   const navigate = useNavigate();
   const [q, setQ] = useState("");
   const { data, isLoading } = useQuery({ queryKey: ["home"], queryFn: () => get("/home").then((r) => r.data) });
@@ -70,7 +69,7 @@ export default function Home() {
             transition={{ duration: 0.5 }}
             className="grid gap-6"
           >
-            <Badge className="justify-self-start">New · LLM apps, system design and more</Badge>
+            <Badge className="justify-self-start">Project-based courses · certificates included</Badge>
             <h1 className="text-[clamp(2.2rem,5.4vw,3.8rem)] font-extrabold leading-[1.05] tracking-[-0.03em] text-foreground">
               Learn the skill.{" "}
               <TypewriterTitle
@@ -109,7 +108,7 @@ export default function Home() {
               </div>
               <Button type="submit" size="lg">Search</Button>
             </form>
-            <div className="flex flex-wrap gap-8">
+            <div className={data && data.stats.courses === 0 ? "hidden" : "flex flex-wrap gap-8"}>
               {[
                 [data?.stats.courses, "courses"],
                 [data?.stats.learners, "learners"],
@@ -174,7 +173,7 @@ export default function Home() {
               >
                 <span className="font-mono text-xl font-semibold text-primary">{c.icon}</span>
                 <b>{c.name}</b>
-                <span className="text-xs text-muted-foreground">{c.courseCount} courses</span>
+                <span className="text-xs text-muted-foreground">{c.courseCount ? `${c.courseCount} courses` : "Coming soon"}</span>
               </Link>
             ) : (
               <div key={c._id} className="skeleton h-28 rounded-xl" />
@@ -193,7 +192,16 @@ export default function Home() {
             <Link to="/courses?sort=popular">See more <ArrowRight /></Link>
           </Button>
         </div>
-        <CourseGrid courses={data?.bestsellers || []} loading={isLoading} />
+        {data && data.bestsellers.length === 0 ? (
+          <EmptyState
+            icon={GraduationCap}
+            title="The first courses are on their way"
+            body="Instructors are building courses right now. Create an account to get notified, or teach one yourself."
+            action={<Button asChild><Link to="/teach">Teach on Vidya</Link></Button>}
+          />
+        ) : (
+          <CourseGrid courses={data?.bestsellers || []} loading={isLoading} />
+        )}
       </section>
 
       <section className="container-page grid gap-4 md:grid-cols-3">
@@ -235,7 +243,7 @@ export default function Home() {
         <div className="flex flex-wrap items-center justify-between gap-6 rounded-3xl bg-ink px-8 py-10 text-ink-foreground">
           <div className="grid gap-2">
             <h2 className="text-3xl font-bold">Teach what you know</h2>
-            <p className="max-w-[52ch] opacity-75">Keep 70% of every sale. We handle payments, video hosting and certificates.</p>
+            <p className="max-w-[52ch] opacity-75">Keep {config.revenueShare}% of every sale. We handle payments, video hosting and certificates.</p>
           </div>
           <Button size="lg" onClick={() => navigate("/teach")}>Become an instructor</Button>
         </div>
