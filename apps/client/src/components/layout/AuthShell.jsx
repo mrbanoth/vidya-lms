@@ -1,40 +1,56 @@
+import { NavLink, useSearchParams } from "react-router";
 import { useQuery } from "@tanstack/react-query";
-import { Award, BookOpenCheck, MessageSquare } from "lucide-react";
 import Logo from "./Logo";
+import HeroIllustration from "@/components/shared/HeroIllustration";
 import { get } from "@/lib/api";
 import { compact } from "@/lib/format";
+import { cn } from "@/lib/utils";
 
-const POINTS = [
-  [BookOpenCheck, "Pick up where you stopped", "Every lesson remembers your place."],
-  [MessageSquare, "Ask inside the lesson", "Instructors answer questions in the course."],
-  [Award, "Certificates you can verify", "Each one has a public link and QR code."],
-];
+/** Login / Sign up switcher shown above the sign-in and sign-up forms. */
+function AuthTabs() {
+  const [params] = useSearchParams();
+  const qs = params.get("next") ? `?next=${encodeURIComponent(params.get("next"))}` : "";
+  const tab = ({ isActive }) =>
+    cn(
+      "-mb-px border-b-2 px-1 pb-3 text-center text-sm font-semibold transition-colors",
+      isActive ? "border-primary text-foreground" : "border-transparent text-muted-foreground hover:text-foreground"
+    );
+  return (
+    <nav aria-label="Account" className="grid grid-cols-2 gap-6 border-b border-border">
+      <NavLink to={`/sign-in${qs}`} className={tab}>Login</NavLink>
+      <NavLink to={`/sign-up${qs}`} className={tab}>Sign up</NavLink>
+    </nav>
+  );
+}
 
-export default function AuthShell({ children }) {
+export default function AuthShell({ children, tabs = false, title = "Welcome back to Vidya" }) {
   const { data } = useQuery({ queryKey: ["stats"], queryFn: () => get("/stats").then((r) => r.data), staleTime: 300_000 });
   return (
-    <div className="grid min-h-dvh lg:grid-cols-2">
-      <aside className="hidden bg-hero p-10 lg:grid lg:content-between">
-        <Logo />
-        <ul className="grid gap-6">
-          {POINTS.map(([Icon, t, d]) => (
-            <li key={t} className="flex gap-4">
-              <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-card text-primary shadow-sm"><Icon className="size-5" /></span>
-              <span className="grid gap-0.5"><b className="font-display text-lg">{t}</b><span className="text-sm opacity-70">{d}</span></span>
-            </li>
-          ))}
-        </ul>
-        <div className="flex gap-6 text-sm opacity-75">
-          {data && data.courses > 0 && <span>{compact(data.courses)} courses</span>}
-          {data && data.learners > 0 && <span>{compact(data.learners)} learners</span>}
-        </div>
-      </aside>
-      <main className="grid place-items-center px-4 py-10 sm:px-8">
-        <div className="grid w-full max-w-[400px] gap-6">
-          <Logo className="lg:hidden" />
-          {children}
-        </div>
-      </main>
+    <div className="grid min-h-dvh place-items-center bg-background px-4 py-8 sm:px-6">
+      <div className="grid w-full max-w-5xl overflow-hidden rounded-2xl border border-border bg-card lg:grid-cols-[1.05fr_1fr]">
+        <aside className="hidden flex-col justify-between gap-6 bg-hero p-10 lg:flex">
+          <div className="grid gap-6">
+            <Logo />
+            <div className="grid gap-2">
+              <h2 className="max-w-xs text-3xl font-extrabold leading-tight">{title}</h2>
+              <p className="text-muted-foreground">Learn. Teach. Grow.</p>
+            </div>
+          </div>
+          <HeroIllustration />
+          <div className="flex gap-6 text-sm text-muted-foreground">
+            {data?.courses > 0 && <span><b className="text-foreground">{compact(data.courses)}</b> courses</span>}
+            {data?.learners > 0 && <span><b className="text-foreground">{compact(data.learners)}</b> learners</span>}
+            {data?.instructors > 0 && <span><b className="text-foreground">{compact(data.instructors)}</b> instructors</span>}
+          </div>
+        </aside>
+        <main className="grid place-items-center px-5 py-10 sm:px-10">
+          <div className="grid w-full max-w-[400px] gap-6">
+            <Logo className="lg:hidden" />
+            {tabs && <AuthTabs />}
+            {children}
+          </div>
+        </main>
+      </div>
     </div>
   );
 }

@@ -51,7 +51,7 @@ export function BarList({ items, format = (v) => v, className }) {
   );
 }
 
-const DONUT = ["#4f46e5", "#10b981", "#f59e0b", "#f43f5e", "#0ea5e9", "#8b5cf6", "#64748b"];
+const DONUT = ["#4338f5", "#10b981", "#f59e0b", "#f43f5e", "#0ea5e9", "#8b5cf6", "#64748b"];
 
 /** Donut with a legend showing each slice's share. */
 export function DonutChart({ items, format = (v) => v }) {

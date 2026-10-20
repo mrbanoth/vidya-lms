@@ -107,7 +107,10 @@ export default function Player() {
           )}
           <ThemeSwitch />
           <Button size="sm" variant="ghost" className="lg:hidden" onClick={() => setShowList(true)}><ListVideo /> Lessons</Button>
-          <Button size="sm" variant="ghost" className="font-semibold text-primary" disabled={!next} onClick={() => next && go(next)}>
+          <Button size="sm" variant="outline" className="hidden sm:inline-flex" disabled={!prev} onClick={() => prev && go(prev)}>
+            <ArrowLeft /> Previous
+          </Button>
+          <Button size="sm" disabled={!next} onClick={() => next && go(next)}>
             Next <ArrowRight />
           </Button>
         </header>

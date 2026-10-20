@@ -26,7 +26,7 @@ export async function pdf(req, res) {
   const { platformName } = await Setting.get();
 
   const verifyUrl = `${env.CLIENT_URL}/verify/${cert.code}`;
-  const qr = await QRCode.toBuffer(verifyUrl, { margin: 0, width: 220, color: { dark: "#2b2b2b", light: "#fffaf0" } });
+  const qr = await QRCode.toBuffer(verifyUrl, { margin: 0, width: 220, color: { dark: "#2b2b2b", light: "#ffffff" } });
   const doc = new PDFDocument({ size: "A4", layout: "landscape", margin: 0 });
   res.setHeader("Content-Type", "application/pdf");
   res.setHeader("Content-Disposition", `inline; filename="certificate-${cert.code}.pdf"`);
@@ -40,9 +40,9 @@ export async function pdf(req, res) {
   const center = (text, y, font, size, color, opts = {}) =>
     doc.fillColor(color).font(font).fontSize(size).text(text, 60, y, { width: W - 120, align: "center", ...opts });
 
-  doc.rect(0, 0, W, H).fill("#fffaf0");
-  doc.rect(22, 22, W - 44, H - 44).lineWidth(4).stroke(gold);
-  doc.rect(32, 32, W - 64, H - 64).lineWidth(1).stroke(gold);
+  doc.rect(0, 0, W, H).fill("#ffffff");
+  doc.rect(22, 22, W - 44, H - 44).lineWidth(4).stroke("#4338f5");
+  doc.rect(32, 32, W - 64, H - 64).lineWidth(1).stroke("#4338f5");
 
   center(platformName, 70, "Times-Bold", 24, ink);
   center("Certificate of Completion", 108, "Times-Bold", 40, ink);
@@ -68,8 +68,8 @@ export async function pdf(req, res) {
   const cy = H - 140;
   doc.circle(cx, cy, 40).fill("#e8d48a");
   doc.circle(cx, cy, 34).fill(gold);
-  doc.circle(cx, cy, 28).lineWidth(0.8).dash(2, { space: 2 }).stroke("#fffaf0").undash();
-  doc.fillColor("#fffaf0").font("Times-Bold").fontSize(9).text(platformName.toUpperCase(), cx - 30, cy - 4, { width: 60, align: "center" });
+  doc.circle(cx, cy, 28).lineWidth(0.8).dash(2, { space: 2 }).stroke("#ffffff").undash();
+  doc.fillColor("#ffffff").font("Times-Bold").fontSize(9).text(platformName.toUpperCase(), cx - 30, cy - 4, { width: 60, align: "center" });
 
   doc.image(qr, W - 120, H - 120, { width: 58 });
   doc.fillColor(grey).font("Helvetica").fontSize(8)

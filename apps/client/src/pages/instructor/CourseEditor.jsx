@@ -4,7 +4,8 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Check, Circle, ExternalLink } from "lucide-react";
 import { toast } from "sonner";
 import FileUpload from "@/components/kokonut/file-upload";
-import { Button, Card, Field, Input, Skeleton, Spinner, StatusPill, Tabs } from "@/components/ui";
+import { Button, Card, Field, Input, Skeleton, Spinner, StatusPill } from "@/components/ui";
+import EditorSteps from "@/components/course/EditorSteps";
 import CourseThumb from "@/components/course/CourseThumb";
 import DetailsForm from "@/components/studio/DetailsForm";
 import CurriculumBuilder from "@/components/studio/CurriculumBuilder";
@@ -132,12 +133,28 @@ export default function CourseEditor() {
         </div>
         <Button variant="outline" asChild><a href={`/courses/${course.slug}`} target="_blank" rel="noreferrer"><ExternalLink /> Preview page</a></Button>
       </div>
-      <Tabs tabs={STEPS.map(([v, l], i) => ({ value: v, label: `${i + 1}. ${l}` }))} value={tab} onChange={(t) => navigate(`/studio/courses/${id}/${t}`)} />
-      {tab === "details" && <DetailsForm key={course.updatedAt} course={course} onSave={save} />}
-      {tab === "curriculum" && <CurriculumBuilder course={course} refresh={refresh} />}
-      {tab === "pricing" && <Pricing course={course} onSave={save} />}
-      {tab === "media" && <Media course={course} refresh={refresh} />}
-      {tab === "publish" && <Publish course={course} refresh={refresh} />}
+      <div className="grid items-start gap-6 lg:grid-cols-[200px_minmax(0,1fr)]">
+        <Card className="p-2 lg:sticky lg:top-20">
+          <EditorSteps
+            steps={STEPS}
+            value={tab}
+            onSelect={(t) => navigate(`/studio/courses/${id}/${t}`)}
+            done={[
+              course.subtitle && course.category && "details",
+              course.totalLessons > 0 && "curriculum",
+              course.thumbnail && "media",
+              course.status === "published" && "publish",
+            ].filter(Boolean)}
+          />
+        </Card>
+        <div className="grid min-w-0 gap-6">
+          {tab === "details" && <DetailsForm key={course.updatedAt} course={course} onSave={save} />}
+          {tab === "curriculum" && <CurriculumBuilder course={course} refresh={refresh} />}
+          {tab === "pricing" && <Pricing course={course} onSave={save} />}
+          {tab === "media" && <Media course={course} refresh={refresh} />}
+          {tab === "publish" && <Publish course={course} refresh={refresh} />}
+        </div>
+      </div>
     </>
   );
 }

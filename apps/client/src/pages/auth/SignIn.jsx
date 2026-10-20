@@ -45,9 +45,9 @@ export default function SignIn() {
   };
 
   return (
-    <AuthShell>
+    <AuthShell tabs>
       <div className="grid gap-1.5">
-        <h1 className="text-3xl font-extrabold">Welcome back</h1>
+        <h1 className="text-2xl font-extrabold">Welcome back</h1>
         <p className="text-muted-foreground">Sign in to continue learning.</p>
       </div>
       <GoogleButton next={next} />

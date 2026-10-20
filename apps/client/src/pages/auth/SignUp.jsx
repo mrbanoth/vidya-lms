@@ -42,9 +42,9 @@ export default function SignUp() {
   };
 
   return (
-    <AuthShell>
+    <AuthShell tabs title="Start learning with Vidya">
       <div className="grid gap-1.5">
-        <h1 className="text-3xl font-extrabold">Create your account</h1>
+        <h1 className="text-2xl font-extrabold">Create your account</h1>
         <p className="text-muted-foreground">Free forever. No card needed.</p>
       </div>
       <div className="flex gap-2" role="radiogroup" aria-label="Account type">

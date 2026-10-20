@@ -15,40 +15,42 @@ const iconFor = (course) =>
   ICONS.find(([rx]) => rx.test(`${course.title} ${course.category?.name || ""}`))?.[1] || Sparkles;
 
 /**
- * Uploaded thumbnail when present; otherwise a calm tile tinted with the
- * course colour, showing the course initials and category.
+ * Uploaded thumbnail when present; otherwise a solid tile in the course
+ * colour with a large category icon, like a designed course cover.
  */
 export default function CourseThumb({ course, className, children, large, compact }) {
-  const color = course.color || "#4f46e5";
+  const color = course.color || "#4338f5";
   const Icon = iconFor(course);
   return (
     <div
       className={cn("relative grid aspect-video w-full max-w-full place-items-center overflow-hidden", className)}
-      style={{ background: `color-mix(in srgb, ${color} 12%, var(--card))` }}
+      style={{ background: `color-mix(in srgb, ${color} 78%, #0b1020)` }}
     >
       {course.thumbnail ? (
         <img src={assetUrl(course.thumbnail)} alt="" loading="lazy" className="absolute inset-0 size-full object-cover" />
       ) : (
         <>
-          <svg aria-hidden className="absolute inset-0 size-full" style={{ color }} preserveAspectRatio="none">
+          <svg aria-hidden className="absolute inset-0 size-full text-white" preserveAspectRatio="none">
             <defs>
-              <pattern id={`dots-${course._id}`} width="18" height="18" patternUnits="userSpaceOnUse">
-                <circle cx="2" cy="2" r="1.2" fill="currentColor" opacity=".18" />
+              <pattern id={`grid-${course._id}`} width="28" height="28" patternUnits="userSpaceOnUse">
+                <path d="M28 0H0V28" fill="none" stroke="currentColor" strokeOpacity=".07" />
               </pattern>
             </defs>
-            <rect width="100%" height="100%" fill={`url(#dots-${course._id})`} />
+            <rect width="100%" height="100%" fill={`url(#grid-${course._id})`} />
           </svg>
+          <span aria-hidden className="absolute -right-[8%] -top-[30%] aspect-square w-[55%] rounded-full bg-white/[.06]" />
+          <span aria-hidden className="absolute -bottom-[35%] -left-[10%] aspect-square w-[45%] rounded-full bg-black/10" />
           <span
             aria-hidden
-            className={cn("relative grid place-items-center text-white shadow-lg", compact ? "size-8 rounded-lg" : large ? "size-24 rounded-2xl" : "size-16 rounded-2xl")}
-            style={{ background: color, boxShadow: `0 12px 24px -12px ${color}` }}
+            className={cn(
+              "relative grid place-items-center rounded-2xl bg-white/10 text-white ring-1 ring-white/20",
+              compact ? "size-8 rounded-lg" : large ? "size-28" : "size-[4.5rem]"
+            )}
           >
-            <Icon className={compact ? "size-4" : large ? "size-11" : "size-8"} strokeWidth={1.75} />
+            <Icon className={compact ? "size-4" : large ? "size-14" : "size-9"} strokeWidth={1.5} />
           </span>
-          <span aria-hidden className="absolute right-[14%] top-[18%] size-3 rounded-full opacity-40" style={{ background: color }} />
-          <span aria-hidden className="absolute bottom-[22%] left-[16%] size-2 rounded-sm opacity-30" style={{ background: color }} />
           {course.category?.name && !compact && (
-            <span className="absolute bottom-3 left-3 text-[11px] font-semibold uppercase tracking-wider" style={{ color }}>
+            <span className="absolute bottom-3 left-3 text-[11px] font-semibold uppercase tracking-wider text-white/75">
               {course.category.name}
             </span>
           )}

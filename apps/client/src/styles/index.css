@@ -5,28 +5,28 @@
 
 /* Vidya design tokens. Kokonut UI and shadcn components read the same names. */
 :root {
-  --background: #f7f8fc;
-  --foreground: #0f172a;
+  --background: #f8fafc;
+  --foreground: #111827;
   --card: #ffffff;
-  --card-foreground: #0f172a;
+  --card-foreground: #111827;
   --popover: #ffffff;
   --popover-foreground: #0f172a;
-  --primary: #4f46e5;
+  --primary: #4338f5;
   --primary-foreground: #ffffff;
-  --secondary: #f1f2f9;
+  --secondary: #f1f5f9;
   --secondary-foreground: #0f172a;
-  --muted: #f1f3f9;
+  --muted: #f1f5f9;
   --muted-foreground: #64748b;
-  --accent: #eef0ff;
+  --accent: #eef2ff;
   --accent-foreground: #4338ca;
-  --destructive: #e11d48;
+  --destructive: #dc2626;
   --destructive-foreground: #ffffff;
   --success: #16a34a;
   --warning: #d97706;
   --info: #2563eb;
-  --border: #e7e9f2;
-  --input: #dfe2ee;
-  --ring: #4f46e5;
+  --border: #e2e8f0;
+  --input: #e2e8f0;
+  --ring: #4338f5;
   --hero: #f3f1ff;
   --ink: #ffffff;
   --ink-foreground: #334155;
